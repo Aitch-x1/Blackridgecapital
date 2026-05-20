@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Black Ridge Capital — Premium Crypto Investment Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@200;300;400;500;600;700&family=Fira+Code:wght@300;400&display=swap" rel="stylesheet"/>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g1:#D4A94B;--g2:#F0CC76;--g3:#A07828;--g4:#FDE99A;
+  --bronze:#CD7F32;--bronze2:#E8A068;--bronze3:#8B5520;
+  --silver:#C0C0C0;--silver2:#E8E8E8;--silver3:#8A8A8A;
+  --gold:#D4A94B;--gold2:#F0CC76;--gold3:#A07828;
+  --plat:#8B5CF6;--plat2:#C4B5FD;--plat3:#5B21B6;
+  --bg-hero:radial-gradient(ellipse 80% 60% at 50% 0%,#0A0520 0%,#020408 55%);
+  --bg-how:linear-gradient(180deg,#020408 0%,#030D1E 100%);
+  --bg-tiers:linear-gradient(155deg,#06030F 0%,#030A18 40%,#060315 100%);
+  --bg-cryptos:linear-gradient(180deg,#030A18 0%,#020508 100%);
+  --bg-featured:linear-gradient(180deg,#040C1A 0%,#030810 100%);
+  --bg-security:linear-gradient(150deg,#07021A 0%,#030C14 50%,#08021A 100%);
+  --bg-news:linear-gradient(180deg,#030810 0%,#020408 100%);
+  --bg-why:linear-gradient(180deg,#040A16 0%,#060215 100%);
+  --bg-testi:linear-gradient(180deg,#060310 0%,#030A14 100%);
+  --bg-faq:linear-gradient(180deg,#030810 0%,#020408 100%);
+  --t1:#EEF0FA;--t2:#A8B0D0;--t3:#5A6488;
+  --ok:#00E5A0;--err:#FF4560;
+  --b1:rgba(212,169,75,.18);--b2:rgba(255,255,255,.06);--b3:rgba(255,255,255,.03);
+  --card-bg:rgba(10,15,30,.85);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:#020408;color:var(--t1);overflow-x:hidden;}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--g3);}
+
+/* ── CURSOR ── */
+#cg{pointer-events:none;position:fixed;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(212,169,75,.055) 0%,transparent 68%);transform:translate(-50%,-50%);transition:left .1s,top .1s;z-index:9998;mix-blend-mode:screen;}
+
+/* ── CANVAS ── */
+#sc{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── NAV ── */
+nav{position:fixed;inset:0 0 auto;z-index:900;padding:1rem 3.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:all .4s;border-bottom:1px solid transparent;}
+nav.solid{background:rgba(2,4,8,.94);backdrop-filter:blur(24px);border-color:var(--b1);}
+.logo-link{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer;flex-shrink:0;}
+.logo-svg{width:44px;height:44px;}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-main{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#fff;letter-spacing:.04em;}
+.logo-sub{font-size:.56rem;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--g1);}
+.nav-mid{display:flex;gap:2rem;flex-wrap:wrap;}
+.nav-mid a{color:var(--t2);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;white-space:nowrap;position:relative;}
+.nav-mid a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--g1);transition:width .3s;}
+.nav-mid a:hover{color:var(--g1);}
+.nav-mid a:hover::after{width:100%;}
+.nav-right{display:flex;gap:.6rem;align-items:center;flex-shrink:0;}
+
+/* Lang selector */
+.lang-sel{position:relative;}
+.lang-btn{background:rgba(212,169,75,.08);border:1px solid rgba(212,169,75,.25);border-radius:6px;padding:.42rem .75rem;color:var(--g1);font-size:.75rem;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .2s;font-weight:600;white-space:nowrap;}
+.lang-btn:hover{background:rgba(212,169,75,.14);}
+.lang-dd{position:absolute;top:calc(100% + 8px);right:0;background:#0A0F1E;border:1px solid var(--b1);border-radius:10px;padding:.5rem;min-width:140px;display:none;z-index:999;box-shadow:0 12px 40px rgba(0,0,0,.6);}
+.lang-dd.open{display:block;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+.lang-opt{padding:.55rem .85rem;border-radius:7px;cursor:pointer;font-size:.8rem;color:var(--t2);transition:all .2s;display:flex;align-items:center;gap:.6rem;}
+.lang-opt:hover{background:rgba(212,169,75,.08);color:var(--g1);}
+.lang-opt.active{color:var(--g1);font-weight:600;}
+
+.btn{padding:.52rem 1.3rem;border-radius:6px;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .25s;border:none;letter-spacing:.04em;white-space:nowrap;}
+.btn-ghost{background:transparent;border:1px solid rgba(212,169,75,.35);color:var(--g1);}
+.btn-ghost:hover{background:rgba(212,169,75,.08);}
+.btn-gold{background:linear-gradient(135deg,var(--g2),var(--g1));color:#000;font-weight:700;box-shadow:0 4px 20px rgba(212,169,75,.28);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,169,75,.45);}
+.btn-lg{padding:.88rem 2.4rem;font-size:.93rem;border-radius:8px;}
+.btn-danger{background:var(--err);color:#fff;border:none;}
+.btn-sm{padding:.38rem .85rem;font-size:.74rem;}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 2rem 5rem;background:var(--bg-hero);z-index:1;}
+.hero-glow{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(212,169,75,.065) 0%,transparent 62%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,169,75,.038) 1px,transparent 1px),linear-gradient(90deg,rgba(212,169,75,.038) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black 25%,transparent 78%);pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:880px;}
+.h-ey{display:inline-flex;align-items:center;gap:9px;padding:.42rem 1.15rem;background:rgba(212,169,75,.07);border:1px solid rgba(212,169,75,.22);border-radius:100px;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--g2);margin-bottom:1.8rem;opacity:0;animation:aUp .8s .15s forwards;}
+.ld{width:7px;height:7px;background:var(--ok);border-radius:50%;box-shadow:0 0 8px var(--ok);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+.h-t{font-size:clamp(2.8rem,6.2vw,5.6rem);font-weight:600;line-height:1.06;margin-bottom:1.7rem;opacity:0;animation:aUp .9s .3s forwards;}
+.h-t .w1{display:block;color:#fff;font-weight:300;font-style:italic;}
+.h-t .w2{display:block;background:linear-gradient(110deg,var(--g4),var(--g1) 55%,var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;}
+.h-s{font-size:1.03rem;color:var(--t2);max-width:530px;margin:0 auto 2.6rem;line-height:1.85;font-weight:300;opacity:0;animation:aUp .9s .46s forwards;}
+.h-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:aUp .8s .62s forwards;}
+.h-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:4.5rem;border:1px solid var(--b1);border-radius:18px;overflow:hidden;background:rgba(212,169,75,.025);backdrop-filter:blur(14px);opacity:0;animation:aUp .8s .8s forwards;}
+.h-st{padding:1.5rem 1rem;text-align:center;border-right:1px solid var(--b1);}
+.h-st:last-child{border:none;}
+.h-sn{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--g1);}
+.h-sl{font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-top:.3rem;display:block;}
+@keyframes aUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:none;}}
+.orb{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:1;border:1px solid;overflow:hidden;}
+.orb svg{width:55%;height:55%;}
+.ob1{width:72px;height:72px;top:18%;left:4%;background:rgba(247,147,26,.14);border-color:rgba(247,147,26,.4);box-shadow:0 0 28px rgba(247,147,26,.18);animation:fl1 7s ease-in-out infinite;}
+.ob2{width:58px;height:58px;top:28%;right:5%;background:rgba(98,126,234,.14);border-color:rgba(98,126,234,.4);box-shadow:0 0 22px rgba(98,126,234,.15);animation:fl2 8s ease-in-out infinite;}
+.ob3{width:52px;height:52px;bottom:28%;left:7%;background:rgba(153,69,255,.12);border-color:rgba(153,69,255,.38);box-shadow:0 0 20px rgba(153,69,255,.14);animation:fl1 9s ease-in-out infinite 1.5s;}
+.ob4{width:62px;height:62px;bottom:22%;right:6%;background:rgba(0,170,228,.12);border-color:rgba(0,170,228,.38);box-shadow:0 0 22px rgba(0,170,228,.14);animation:fl2 7.5s ease-in-out infinite .8s;}
+.ob5{width:46px;height:46px;top:12%;left:42%;background:rgba(243,186,47,.12);border-color:rgba(243,186,47,.38);box-shadow:0 0 18px rgba(243,186,47,.14);animation:fl1 10s ease-in-out infinite 2s;}
+@keyframes fl1{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(6deg);}}
+@keyframes fl2{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-16px) rotate(-6deg);}}
+
+/* ── TICKER ── */
+.ticker-bar{background:rgba(212,169,75,.03);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);padding:.7rem 0;overflow:hidden;position:relative;z-index:1;}
+.ticker-bar::before,.ticker-bar::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none;}
+.ticker-bar::before{left:0;background:linear-gradient(to right,#020408,transparent);}
+.ticker-bar::after{right:0;background:linear-gradient(to left,#020408,transparent);}
+.tk-inner{display:flex;width:max-content;animation:tkMove 55s linear infinite;}
+@keyframes tkMove{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.tk-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2rem;font-size:.78rem;border-right:1px solid var(--b2);}
+.tk-sym{font-weight:700;color:var(--t1);}
+.tk-p{color:var(--t2);}
+.tk-up{color:var(--ok);}
+.tk-dn{color:var(--err);}
+
+/* ── SECTION UTILITY ── */
+section{padding:5.5rem 3.5rem;position:relative;z-index:1;}
+.container{max-width:1160px;margin:0 auto;}
+.chip{display:inline-block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);background:rgba(212,169,75,.07);border:1px solid rgba(212,169,75,.18);border-radius:100px;padding:.28rem .88rem;margin-bottom:.8rem;}
+.sec-h{font-size:clamp(1.85rem,3.6vw,2.9rem);font-weight:600;line-height:1.15;color:#fff;margin-bottom:.9rem;}
+.sec-h em{color:var(--g1);font-style:normal;}
+.sec-p{color:var(--t2);font-size:.95rem;line-height:1.85;font-weight:300;}
+.tc{text-align:center;}
+.tc .sec-p{max-width:560px;margin:0 auto;}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .72s ease,transform .72s ease;}
+.rv.in{opacity:1;transform:none;}
+.rv.d1{transition-delay:.08s;}.rv.d2{transition-delay:.16s;}.rv.d3{transition-delay:.24s;}.rv.d4{transition-delay:.32s;}.rv.d5{transition-delay:.4s;}.rv.d6{transition-delay:.48s;}
+
+/* ── FEATURED ── */
+#featured{background:var(--bg-featured);padding:3.5rem 3.5rem;}
+.feat-top{text-align:center;margin-bottom:2rem;}
+.feat-lbl{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);margin-bottom:1.2rem;display:block;}
+.feat-logos{display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap;}
+.feat-logo{display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:.45;transition:opacity .3s,transform .3s;cursor:default;}
+.feat-logo:hover{opacity:.85;transform:translateY(-2px);}
+.feat-logo-mark{font-size:1.4rem;font-weight:800;color:var(--t1);font-family:'Cormorant Garamond',serif;letter-spacing:.02em;}
+.feat-logo-name{font-size:.65rem;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;}
+.feat-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .9rem;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18);border-radius:100px;font-size:.7rem;color:var(--ok);margin-top:1.5rem;}
+
+/* ── HOW ── */
+#how{background:var(--bg-how);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:1.4rem;margin-top:3rem;}
+.step{background:rgba(10,16,30,.8);border:1px solid var(--b3);border-radius:18px;padding:2rem;position:relative;overflow:hidden;transition:all .4s;}
+.step::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,169,75,.04),transparent);opacity:0;transition:opacity .4s;}
+.step:hover{border-color:var(--b1);transform:translateY(-5px);box-shadow:0 14px 40px rgba(212,169,75,.1);}
+.step:hover::before{opacity:1;}
+.step-n{font-family:'Cormorant Garamond',serif;font-size:4.5rem;font-weight:700;color:rgba(212,169,75,.06);line-height:1;position:absolute;top:.8rem;right:1.4rem;}
+.step-ico{width:46px;height:46px;border-radius:12px;background:rgba(212,169,75,.08);border:1px solid rgba(212,169,75,.18);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.1rem;}
+.step h3{font-family:'Outfit',sans-serif;font-size:.96rem;font-weight:700;color:#fff;margin-bottom:.45rem;}
+.step p{font-size:.83rem;color:var(--t2);line-height:1.7;}
+
+/* ── TIERS ── */
+#tiers{background:var(--bg-tiers);}
+.tiers-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.8rem;margin-top:3.2rem;perspective:1200px;}
+
+/* Tier card base */
+.tc-card{border-radius:22px;padding:0;position:relative;overflow:visible;transition:transform .5s cubic-bezier(.23,1.01,.32,1),box-shadow .5s;cursor:default;transform-style:preserve-3d;}
+.tc-card:hover{transform:translateY(-10px) rotateX(2deg);}
+.tc-inner{border-radius:22px;padding:2.4rem;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column;}
+
+/* Bronze */
+.tc-bronze .tc-inner{background:linear-gradient(160deg,#1A0D00 0%,#2D1500 40%,#1A0D00 100%);border:1px solid rgba(205,127,50,.35);}
+.tc-bronze:hover{box-shadow:0 20px 60px rgba(205,127,50,.25);}
+.tc-bronze .tc-header{background:linear-gradient(135deg,rgba(205,127,50,.15),rgba(205,127,50,.05));}
+.tc-bronze .tc-glow{position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(205,127,50,.2),transparent 70%);pointer-events:none;}
+.tc-bronze .tc-roi{background:linear-gradient(135deg,#E8A068,#CD7F32,#8B5520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tc-bronze .tc-btn-f{background:linear-gradient(135deg,#E8A068,#CD7F32);color:#000;box-shadow:0 4px 20px rgba(205,127,50,.35);}
+.tc-bronze .tc-btn-f:hover{box-shadow:0 8px 32px rgba(205,127,50,.55);}
+.tc-bronze .tc-ribbon{background:linear-gradient(135deg,#E8A068,#CD7F32);}
+.tc-bronze .ck{color:#CD7F32;}
+.tc-bronze .tc-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#CD7F32,transparent);}
+
+/* Silver */
+.tc-silver .tc-inner{background:linear-gradient(160deg,#0D0D0D 0%,#1A1A1A 40%,#0D0D0D 100%);border:1px solid rgba(192,192,192,.3);}
+.tc-silver:hover{box-shadow:0 20px 60px rgba(192,192,192,.18);}
+.tc-silver .tc-glow{position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(192,192,192,.15),transparent 70%);pointer-events:none;}
+.tc-silver .tc-roi{background:linear-gradient(135deg,#E8E8E8,#C0C0C0,#8A8A8A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tc-silver .tc-btn-f{background:linear-gradient(135deg,#E8E8E8,#A0A0A0);color:#000;box-shadow:0 4px 20px rgba(192,192,192,.25);}
+.tc-silver .tc-btn-f:hover{box-shadow:0 8px 32px rgba(192,192,192,.4);}
+.tc-silver .tc-ribbon{background:linear-gradient(135deg,#E8E8E8,#A0A0A0);}
+.tc-silver .ck{color:#C0C0C0;}
+.tc-silver .tc-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#C0C0C0,transparent);}
+
+/* Gold */
+.tc-gold .tc-inner{background:linear-gradient(160deg,#120D00 0%,#1E1500 40%,#120D00 100%);border:1px solid rgba(212,169,75,.45);}
+.tc-gold:hover{box-shadow:0 24px 70px rgba(212,169,75,.35);}
+.tc-gold .tc-glow{position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(212,169,75,.22),transparent 70%);pointer-events:none;z-index:0;}
+.tc-gold .tc-roi{background:linear-gradient(135deg,var(--g4),var(--g1),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tc-gold .tc-btn-f{background:linear-gradient(135deg,var(--g2),var(--g1));color:#000;box-shadow:0 4px 20px rgba(212,169,75,.4);}
+.tc-gold .tc-btn-f:hover{box-shadow:0 8px 36px rgba(212,169,75,.6);}
+.tc-gold .tc-ribbon{background:linear-gradient(135deg,var(--g2),var(--g1));}
+.tc-gold .ck{color:var(--g1);}
+.tc-gold .tc-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--g1),transparent);pointer-events:none;z-index:0;}
+/* Gold shimmer - fully non-interactive */
+.tc-gold .tc-inner::before{content:'';position:absolute;top:-100%;left:-60%;width:40%;height:300%;background:linear-gradient(90deg,transparent,rgba(212,169,75,.07),transparent);transform:skewX(-15deg);animation:shimmer 4s ease-in-out infinite;pointer-events:none;z-index:0;}
+.tc-gold .tc-inner>*{position:relative;z-index:2;}
+.tc-gold .tc-inner .tc-btn{position:relative;z-index:10;cursor:pointer;}
+@keyframes shimmer{0%,70%{transform:skewX(-15deg) translateX(0);}100%{transform:skewX(-15deg) translateX(450%);}}
+
+/* Platinum */
+.tc-plat .tc-inner{background:linear-gradient(160deg,#0D0518 0%,#180A2D 40%,#0D0518 100%);border:1px solid rgba(139,92,246,.4);}
+.tc-plat:hover{box-shadow:0 24px 70px rgba(139,92,246,.3);}
+.tc-plat .tc-glow{position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,.2),transparent 70%);pointer-events:none;}
+.tc-plat .tc-roi{background:linear-gradient(135deg,#C4B5FD,#8B5CF6,#5B21B6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tc-plat .tc-btn-f{background:linear-gradient(135deg,#C4B5FD,#8B5CF6);color:#000;box-shadow:0 4px 20px rgba(139,92,246,.35);}
+.tc-plat .tc-btn-f:hover{box-shadow:0 8px 36px rgba(139,92,246,.55);}
+.tc-plat .tc-ribbon{background:linear-gradient(135deg,#C4B5FD,#8B5CF6);}
+.tc-plat .ck{color:#8B5CF6;}
+.tc-plat .tc-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#8B5CF6,transparent);}
+
+/* shared tier card parts */
+.tc-ribbon{position:absolute;top:1.3rem;right:1.3rem;padding:.22rem .72rem;border-radius:100px;font-size:.62rem;font-weight:800;color:#000;letter-spacing:.06em;text-transform:uppercase;}
+.tc-glow{pointer-events:none;}
+.tc-header{padding:1.8rem 2rem 1.4rem;border-radius:14px 14px 0 0;text-align:center;position:relative;}
+.tc-medal{font-size:2.4rem;margin-bottom:.6rem;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));}
+.tc-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#fff;}
+.tc-pack{font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-top:.1rem;}
+.tc-sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem 0;}
+.tc-roi-block{text-align:center;margin-bottom:1.2rem;}
+.tc-roi{font-family:'Cormorant Garamond',serif;font-size:3.8rem;font-weight:700;line-height:1;}
+.tc-roi-l{font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.14em;margin-top:.2rem;}
+.tc-min{text-align:center;font-size:.78rem;color:var(--t3);margin-bottom:1.4rem;padding:.5rem;background:rgba(255,255,255,.03);border-radius:8px;}
+.tc-min strong{color:var(--t2);}
+.tc-feats{list-style:none;margin-bottom:1.8rem;flex:1;}
+.tc-feats li{font-size:.82rem;color:var(--t2);padding:.36rem 0;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid rgba(255,255,255,.04);}
+.tc-feats li:last-child{border:none;}
+.ck{font-weight:700;font-size:.88rem;}
+.tc-btn{width:100%;padding:.88rem;border-radius:10px;font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.04em;}
+.tc-btn-o{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--t2);}
+.tc-btn-o:hover{background:rgba(255,255,255,.05);}
+.tc-btn-f{border:none;transform:translateY(0);transition:all .3s;}
+.tc-btn-f:hover{transform:translateY(-2px);}
+
+/* Floating particle effect on gold card */
+.particle{position:absolute;width:3px;height:3px;background:var(--g2);border-radius:50%;pointer-events:none;animation:particleFloat linear infinite;opacity:0;}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(0) scale(0);}20%{opacity:.8;}80%{opacity:.4;}100%{opacity:0;transform:translateY(-80px) scale(.5);}}
+
+/* ── CRYPTOS ── */
+#cryptos{background:var(--bg-cryptos);}
+.coin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem;margin-top:3rem;}
+.coin{background:rgba(8,14,28,.85);border:1px solid var(--b3);border-radius:16px;padding:1.5rem .9rem;text-align:center;cursor:default;transition:all .35s;position:relative;overflow:hidden;}
+.coin::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;}
+.coin:hover{transform:translateY(-5px);}
+.coin:hover::before{opacity:1;}
+.coin-logo{width:54px;height:54px;border-radius:50%;margin:0 auto .85rem;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;overflow:hidden;}
+.coin-logo svg{width:100%;height:100%;}
+.coin-name{font-weight:700;font-size:.88rem;color:#fff;margin-bottom:.12rem;position:relative;z-index:1;}
+.coin-sym{font-size:.66rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;position:relative;z-index:1;}
+.coin-chg{font-size:.73rem;margin-top:.42rem;font-weight:700;position:relative;z-index:1;}
+.coin-price{font-size:.72rem;color:var(--t3);margin-top:.15rem;position:relative;z-index:1;}
+
+/* ── FEATURED ── */
+#featured{background:var(--bg-featured);padding:3.5rem 3.5rem;}
+
+/* ── NEWS / MARKET ── */
+#news{background:var(--bg-news);}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(295px,1fr));gap:1.4rem;margin-top:3rem;}
+.news-card{background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:18px;overflow:hidden;transition:all .35s;cursor:pointer;}
+.news-card:hover{border-color:var(--b1);transform:translateY(-4px);box-shadow:0 14px 40px rgba(212,169,75,.1);}
+.news-img{height:160px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.news-body{padding:1.5rem;}
+.news-tag{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--g1);font-weight:700;margin-bottom:.6rem;}
+.news-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:#fff;margin-bottom:.6rem;line-height:1.35;}
+.news-text{font-size:.8rem;color:var(--t2);line-height:1.7;margin-bottom:.9rem;}
+.news-meta{font-size:.72rem;color:var(--t3);display:flex;align-items:center;gap:.5rem;}
+.news-dot{width:4px;height:4px;background:var(--t3);border-radius:50%;}
+
+/* market pulse */
+.market-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:2rem;margin-bottom:3rem;}
+.mkt-card{background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;padding:1.2rem;transition:border-color .3s;}
+.mkt-card:hover{border-color:var(--b1);}
+.mkt-sym{font-weight:700;font-size:.85rem;color:#fff;margin-bottom:.2rem;}
+.mkt-price{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--t1);}
+.mkt-chg{font-size:.75rem;font-weight:700;margin-top:.2rem;}
+.mkt-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:.6rem;overflow:hidden;}
+.mkt-prog{height:100%;border-radius:2px;}
+
+/* ── SECURITY ── */
+#security{background:var(--bg-security);}
+.sec-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
+.sec-visual{position:relative;height:440px;}
+.sv-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(212,169,75,.1),transparent 68%);border-radius:50%;animation:svPulse 4s ease-in-out infinite;}
+@keyframes svPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8;}50%{transform:translate(-50%,-50%) scale(1.12);opacity:1;}}
+.sv-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(212,169,75,.14);}
+.sv-r1{width:240px;height:240px;animation:spin 22s linear infinite;}
+.sv-r2{width:350px;height:350px;animation:spin 34s linear infinite reverse;}
+.sv-r3{width:430px;height:430px;border-color:rgba(212,169,75,.06);animation:spin 42s linear infinite;}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+.sv-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:96px;height:96px;background:linear-gradient(135deg,rgba(212,169,75,.18),rgba(212,169,75,.06));border:1px solid var(--b1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.4rem;z-index:2;}
+.sv-dot{position:absolute;width:9px;height:9px;background:var(--g1);border-radius:50%;box-shadow:0 0 10px var(--g1);}
+.sf-list{display:grid;gap:1.5rem;}
+.sf{display:flex;gap:.95rem;align-items:flex-start;}
+.sf-ico{width:44px;height:44px;border-radius:11px;background:rgba(212,169,75,.07);border:1px solid rgba(212,169,75,.14);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
+.sf h4{font-family:'Outfit',sans-serif;font-size:.93rem;font-weight:700;color:#fff;margin-bottom:.28rem;}
+.sf p{font-size:.82rem;color:var(--t2);line-height:1.62;}
+
+/* ── WHY ── */
+#why{background:var(--bg-why);}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1.2rem;margin-top:3rem;}
+.wc{background:rgba(8,14,28,.85);border:1px solid var(--b3);border-radius:16px;padding:1.85rem;transition:all .35s;}
+.wc:hover{border-color:var(--b1);transform:translateY(-4px);}
+.wc-n{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:rgba(212,169,75,.08);line-height:1;margin-bottom:.7rem;}
+.wc h3{font-size:.94rem;font-weight:700;color:#fff;margin-bottom:.42rem;}
+.wc p{font-size:.82rem;color:var(--t2);line-height:1.65;}
+
+/* ── TESTIMONIALS ── */
+#testi{background:var(--bg-testi);}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:1.4rem;margin-top:3rem;}
+.tcard{background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:18px;padding:2.1rem;transition:all .35s;position:relative;overflow:hidden;}
+.tcard::after{content:'"';position:absolute;bottom:.2rem;right:1.2rem;font-size:5.5rem;color:rgba(212,169,75,.04);font-family:'Cormorant Garamond',serif;line-height:1;}
+.tcard:hover{border-color:var(--b1);transform:translateY(-3px);}
+.tstars{color:var(--g1);font-size:.82rem;letter-spacing:3px;margin-bottom:.9rem;}
+.ttext{font-size:.87rem;color:var(--t2);line-height:1.8;margin-bottom:1.4rem;font-style:italic;}
+.tau{display:flex;align-items:center;gap:.75rem;}
+.tav{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;color:#000;flex-shrink:0;}
+.tname{font-weight:700;font-size:.85rem;color:#fff;}
+.tloc{font-size:.7rem;color:var(--t3);}
+
+/* ── FAQ ── */
+#faq{background:var(--bg-faq);}
+.faq-w{max-width:800px;margin:3rem auto 0;}
+.faq-i{border-bottom:1px solid var(--b2);overflow:hidden;}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.35rem 0;cursor:pointer;gap:1rem;}
+.faq-q h4{font-family:'Outfit',sans-serif;font-weight:600;font-size:.93rem;color:#fff;transition:color .2s;}
+.faq-tog{width:27px;height:27px;border-radius:50%;border:1px solid var(--b2);background:rgba(10,16,30,.9);display:flex;align-items:center;justify-content:center;color:var(--g1);flex-shrink:0;transition:all .35s;font-size:1.05rem;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding-bottom .3s;font-size:.86rem;color:var(--t2);line-height:1.82;}
+.faq-i.op .faq-a{max-height:300px;padding-bottom:1.2rem;}
+.faq-i.op .faq-tog{transform:rotate(45deg);background:rgba(212,169,75,.1);border-color:var(--g1);}
+.faq-i.op .faq-q h4{color:var(--g1);}
+
+/* ── CTA ── */
+#cta{background:var(--bg-faq);}
+.cta-box{max-width:700px;margin:0 auto;text-align:center;background:linear-gradient(160deg,rgba(10,16,30,.95),rgba(18,12,28,.95));border:1px solid var(--b1);border-radius:26px;padding:4.5rem 3rem;position:relative;overflow:hidden;}
+.cta-box::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(212,169,75,.065),transparent 62%);pointer-events:none;}
+.cta-box h2{font-size:clamp(1.9rem,3.8vw,2.9rem);font-weight:600;color:#fff;margin-bottom:.9rem;position:relative;}
+.cta-box p{color:var(--t2);margin-bottom:2.2rem;line-height:1.85;font-size:.96rem;position:relative;font-weight:300;}
+
+/* ── T&C MODAL ── */
+.tc-modal-text{max-height:320px;overflow-y:auto;font-size:.8rem;color:var(--t2);line-height:1.75;margin-bottom:1.2rem;padding-right:.5rem;}
+.tc-modal-text h5{color:var(--g1);font-size:.82rem;margin:.8rem 0 .3rem;font-family:'Outfit',sans-serif;font-weight:700;}
+.tc-agree-row{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1.2rem;}
+.tc-agree-row input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--g1);}
+.tc-agree-row label{font-size:.8rem;color:var(--t2);line-height:1.5;cursor:pointer;}
+.tc-agree-row label a{color:var(--g1);}
+
+/* ── FOOTER ── */
+footer{background:#020408;border-top:1px solid var(--b2);padding:3.5rem 3.5rem 2rem;position:relative;z-index:1;}
+.ft{max-width:1160px;margin:0 auto;}
+.ft-top{display:flex;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:2rem;}
+.ft-brand p{font-size:.8rem;color:var(--t3);max-width:275px;line-height:1.72;margin-top:.75rem;}
+.ft-col h5{font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);margin-bottom:.9rem;font-weight:600;}
+.ft-col a{display:block;color:var(--t2);font-size:.82rem;text-decoration:none;margin-bottom:.48rem;transition:color .2s;cursor:pointer;}
+.ft-col a:hover{color:var(--g1);}
+.ft-bot{border-top:1px solid var(--b2);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;}
+.ft-copy{font-size:.74rem;color:var(--t3);}
+.ft-disc{font-size:.68rem;color:rgba(90,100,136,.45);max-width:580px;line-height:1.6;}
+
+/* ── MODALS ── */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);}
+.mo.on{display:flex;}
+.mbox{background:#0C1220;border:1px solid var(--b1);border-radius:22px;padding:2.6rem;width:100%;max-width:490px;max-height:92vh;overflow-y:auto;position:relative;animation:mIn .3s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(10px);}to{opacity:1;transform:none;}}
+.mcl{position:absolute;top:1.1rem;right:1.1rem;background:rgba(255,255,255,.05);border:1px solid var(--b2);color:var(--t3);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.05rem;cursor:pointer;transition:all .2s;line-height:1;}
+.mcl:hover{color:#fff;border-color:var(--b1);}
+.mbox h2{font-size:1.9rem;font-weight:600;margin-bottom:.25rem;color:#fff;}
+.msub{font-size:.8rem;color:var(--t2);margin-bottom:1.8rem;}
+.fg{margin-bottom:1rem;}
+.fg label{display:block;font-size:.68rem;font-weight:600;color:var(--t2);margin-bottom:.38rem;letter-spacing:.09em;text-transform:uppercase;}
+.fg input,.fg select{width:100%;padding:.76rem .95rem;background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:10px;color:var(--t1);font-size:.86rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s;}
+.fg input:focus,.fg select:focus{border-color:rgba(212,169,75,.45);}
+.fg select option{background:#0C1220;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.ml{font-size:.8rem;color:var(--t2);text-align:center;margin-top:.9rem;}
+.ml a{color:var(--g1);cursor:pointer;font-weight:600;text-decoration:none;}
+.ferr{font-size:.76rem;color:var(--err);margin-bottom:.7rem;padding:.55rem .82rem;background:rgba(255,69,96,.06);border-radius:8px;border:1px solid rgba(255,69,96,.16);}
+.fok{padding:.8rem;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18);border-radius:8px;font-size:.84rem;color:var(--ok);text-align:center;margin-bottom:.9rem;}
+
+/* ── DASH ── */
+.dpage{min-height:100vh;background:#020408;padding:7rem 3.5rem 4rem;}
+.dh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2.2rem;flex-wrap:wrap;gap:1rem;}
+.dh-w{font-size:2rem;font-weight:600;color:#fff;}
+.dh-w em{color:var(--g1);font-style:normal;}
+.dh-s{font-size:.82rem;color:var(--t2);margin-top:.25rem;}
+.dstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:.9rem;margin-bottom:2rem;}
+.ds{background:rgba(10,16,28,.9);border:1px solid var(--b3);border-radius:13px;padding:1.4rem;transition:border-color .3s;}
+.ds:hover{border-color:var(--b1);}
+.ds-l{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:.5rem;}
+.ds-v{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;color:var(--g1);}
+.dsec{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:.9rem;}
+.inv-tbl{width:100%;border-collapse:collapse;font-size:.8rem;}
+.inv-tbl th{text-align:left;padding:.72rem .95rem;background:rgba(255,255,255,.03);color:var(--t3);font-size:.66rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;}
+.inv-tbl th:first-child{border-radius:8px 0 0 8px;}
+.inv-tbl th:last-child{border-radius:0 8px 8px 0;}
+.inv-tbl td{padding:.95rem;border-bottom:1px solid var(--b3);color:var(--t1);}
+.sb{padding:.22rem .62rem;border-radius:100px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+.sb-p{background:rgba(255,165,0,.1);color:orange;border:1px solid rgba(255,165,0,.2);}
+.sb-c{background:rgba(0,229,160,.1);color:var(--ok);border:1px solid rgba(0,229,160,.2);}
+.sb-r{background:rgba(255,69,96,.1);color:var(--err);border:1px solid rgba(255,69,96,.2);}
+.emp{text-align:center;padding:3rem;color:var(--t2);font-size:.88rem;}
+
+/* ── INVEST FLOW ── */
+.istep{display:none;}
+.istep.on{display:block;}
+.ti-opts{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.4rem;}
+.tio{background:rgba(255,255,255,.03);border:2px solid transparent;border-radius:11px;padding:.95rem;cursor:pointer;transition:all .22s;}
+.tio:hover{border-color:rgba(212,169,75,.3);}
+.tio.sel{border-color:var(--g1);background:rgba(212,169,75,.05);}
+.tio-n{font-weight:700;font-size:.86rem;color:#fff;margin-bottom:.18rem;}
+.tio-r{font-size:.74rem;color:var(--g1);font-weight:600;}
+.tio-m{font-size:.68rem;color:var(--t3);}
+.co-opts{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-bottom:1.4rem;}
+.coo{background:rgba(255,255,255,.03);border:2px solid transparent;border-radius:10px;padding:.65rem .3rem;cursor:pointer;text-align:center;transition:all .22s;}
+.coo:hover{border-color:rgba(212,169,75,.3);}
+.coo.sel{border-color:var(--g1);background:rgba(212,169,75,.05);}
+.coo-i{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;margin:0 auto .28rem;overflow:hidden;}
+.coo-i svg{width:100%;height:100%;}
+.coo-s{font-size:.64rem;font-weight:700;color:#fff;}
+.wbox{background:rgba(255,255,255,.03);border:1px solid var(--b1);border-radius:11px;padding:1.3rem;margin-bottom:1.1rem;}
+.wlbl{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.42rem;}
+.waddr{font-family:'Fira Code',monospace;font-size:.76rem;color:var(--g1);word-break:break-all;line-height:1.6;margin-bottom:.8rem;}
+.wcp{background:transparent;border:1px solid var(--b1);border-radius:7px;padding:.36rem .78rem;color:var(--t2);font-size:.72rem;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;}
+.wcp:hover{border-color:var(--g1);color:var(--g1);}
+.isum{background:rgba(255,255,255,.03);border:1px solid var(--b3);border-radius:10px;padding:.95rem 1.1rem;margin-bottom:1.1rem;}
+.isr{display:flex;justify-content:space-between;padding:.3rem 0;font-size:.8rem;border-bottom:1px solid var(--b3);}
+.isr:last-child{border:none;}
+.isr span:last-child{color:var(--g1);font-weight:600;}
+.sbtns{display:flex;gap:.7rem;margin-top:.5rem;}
+.sbtns .btn-ghost{flex:1;padding:.78rem;}
+.sbtns .btn-gold{flex:2;padding:.78rem;border-radius:8px;}
+
+/* ── ADMIN ── */
+.apage{min-height:100vh;background:#020408;padding:7rem 3.5rem 4rem;}
+.ahdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
+.atitle{font-size:1.9rem;font-weight:600;color:#fff;}
+.atitle em{color:var(--g1);font-style:normal;}
+.atabs{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid var(--b2);}
+.atab{padding:.82rem 1.4rem;background:transparent;border:none;color:var(--t2);font-size:.82rem;font-family:'Outfit',sans-serif;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-weight:500;}
+.atab.on{color:var(--g1);border-bottom-color:var(--g1);}
+.ac{display:none;}
+.ac.on{display:block;}
+.wrow{background:rgba(10,16,28,.9);border:1px solid var(--b2);border-radius:12px;padding:1.1rem 1.4rem;display:grid;grid-template-columns:110px 1fr auto;gap:.9rem;align-items:center;margin-bottom:.65rem;}
+.wcl{display:flex;align-items:center;gap:.6rem;font-weight:700;color:#fff;font-size:.88rem;}
+.wi{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:8px;padding:.6rem .88rem;color:var(--t1);font-size:.8rem;font-family:'Fira Code',monospace;outline:none;transition:border-color .2s;}
+.wi:focus{border-color:rgba(212,169,75,.4);}
+.wsv{background:linear-gradient(135deg,var(--g2),var(--g1));border:none;padding:.58rem 1.05rem;border-radius:8px;font-size:.76rem;font-weight:700;color:#000;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;}
+.ni{background:rgba(10,16,28,.9);border:1px solid var(--b2);border-radius:11px;padding:1.1rem;display:flex;align-items:flex-start;gap:.85rem;margin-bottom:.62rem;cursor:pointer;transition:border-color .2s;}
+.ni:hover{border-color:var(--b1);}
+.nd{width:8px;height:8px;border-radius:50%;background:var(--g1);flex-shrink:0;margin-top:5px;}
+.nd.r{background:var(--t3);}
+.nt{font-weight:600;font-size:.85rem;color:#fff;margin-bottom:.2rem;}
+.nm{font-size:.72rem;color:var(--t2);}
+.nbadge{background:var(--g1);color:#000;border-radius:100px;font-size:.63rem;font-weight:700;padding:.07rem .48rem;margin-left:.45rem;vertical-align:middle;}
+.ait{width:100%;border-collapse:collapse;font-size:.78rem;}
+.ait th{text-align:left;padding:.68rem .88rem;background:rgba(255,255,255,.03);color:var(--t3);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;}
+.ait td{padding:.86rem .88rem;border-bottom:1px solid var(--b3);color:var(--t1);}
+.cbtn{background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.22);color:var(--ok);padding:.27rem .62rem;border-radius:7px;font-size:.68rem;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;}
+.rbtn{background:rgba(255,69,96,.08);border:1px solid rgba(255,69,96,.18);color:var(--err);padding:.27rem .62rem;border-radius:7px;font-size:.68rem;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;margin-left:.38rem;}
+.page{display:none;}
+.page.on{display:block;}
+
+/* ── HAMBURGER BUTTON ── */
+.hbg{display:none;flex-direction:column;justify-content:center;gap:5px;width:38px;height:38px;background:rgba(212,169,75,.08);border:1px solid rgba(212,169,75,.25);border-radius:8px;cursor:pointer;padding:8px;flex-shrink:0;transition:background .2s;}
+.hbg:hover{background:rgba(212,169,75,.15);}
+.hbg span{display:block;height:2px;background:var(--g1);border-radius:2px;transition:all .3s;}
+.hbg.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hbg.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hbg.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* ── MOBILE DRAWER ── */
+.mob-drawer{position:fixed;inset:0;z-index:899;pointer-events:none;}
+.mob-drawer.open{pointer-events:all;}
+.mob-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);opacity:0;transition:opacity .3s;backdrop-filter:blur(4px);}
+.mob-drawer.open .mob-overlay{opacity:1;}
+.mob-panel{position:absolute;top:0;right:0;width:78%;max-width:300px;height:100%;background:linear-gradient(160deg,#0A0F1E,#060315);border-left:1px solid var(--b1);padding:5.5rem 1.8rem 2rem;display:flex;flex-direction:column;gap:0;transform:translateX(100%);transition:transform .35s cubic-bezier(.23,1.01,.32,1);}
+.mob-drawer.open .mob-panel{transform:translateX(0);}
+.mob-panel a{display:block;color:var(--t2);text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.95rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s;}
+.mob-panel a:last-of-type{border-bottom:none;}
+.mob-panel a:hover{color:var(--g1);}
+.mob-divider{height:1px;background:var(--b1);margin:1rem 0;}
+.mob-auth{display:flex;flex-direction:column;gap:.7rem;margin-top:.5rem;}
+@keyframes bounceIn{0%{transform:scale(0);}60%{transform:scale(1.15);}100%{transform:scale(1);}}
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE — 768px and below
+══════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* NAV */
+  nav{padding:.85rem 1.2rem;}
+  .nav-mid{display:none;}
+  .lang-btn{font-size:.68rem;padding:.35rem .55rem;}
+  .nav-right{gap:.4rem;}
+  .btn{padding:.45rem .9rem;font-size:.76rem;}
+  .btn-lg{padding:.75rem 1.6rem;font-size:.86rem;}
+  .hbg{display:flex;}
+
+  /* HERO */
+  #hero{padding:6.5rem 1.2rem 3.5rem;}
+  .h-t{font-size:clamp(2.2rem,9vw,3.2rem);}
+  .h-s{font-size:.92rem;}
+  .h-ctas{flex-direction:column;align-items:center;}
+  .h-ctas .btn{width:100%;max-width:320px;text-align:center;}
+  .h-stats{grid-template-columns:repeat(2,1fr);margin-top:2.8rem;}
+  .h-st{padding:1.1rem .7rem;}
+  .h-st:nth-child(2){border-right:none;}
+  .h-st:nth-child(3){border-right:1px solid var(--b1);border-top:1px solid var(--b1);}
+  .h-st:nth-child(4){border-top:1px solid var(--b1);}
+  .h-sn{font-size:1.6rem;}
+  .orb{display:none;}
+
+  /* SECTIONS */
+  section{padding:3.5rem 1.2rem;}
+  #featured{padding:2.5rem 1.2rem;}
+  .feat-logos{gap:1.4rem;}
+
+  /* HOW IT WORKS */
+  .steps{grid-template-columns:1fr;}
+
+  /* TIERS */
+  .tiers-wrap{grid-template-columns:1fr;}
+
+  /* COINS */
+  .coin-grid{grid-template-columns:repeat(2,1fr);gap:.7rem;}
+
+  /* MARKET STRIP */
+  .market-strip{grid-template-columns:repeat(2,1fr);}
+
+  /* NEWS */
+  .news-grid{grid-template-columns:1fr;}
+
+  /* SECURITY */
+  .sec-wrap{grid-template-columns:1fr;gap:2rem;}
+  .sec-visual{display:none;}
+
+  /* WHY US */
+  .why-grid{grid-template-columns:1fr;}
+
+  /* TESTIMONIALS */
+  .tg{grid-template-columns:1fr;}
+
+  /* CTA */
+  .cta-box{padding:2.8rem 1.4rem;}
+
+  /* FOOTER */
+  footer{padding:2.5rem 1.2rem 1.5rem;}
+  .ft-top{flex-direction:column;gap:1.8rem;}
+  .ft-bot{flex-direction:column;gap:.6rem;}
+
+  /* MODALS */
+  .mbox{padding:1.8rem 1.3rem;border-radius:16px;}
+  .mbox h2{font-size:1.5rem;}
+  .frow{grid-template-columns:1fr;}
+
+  /* DASHBOARD */
+  .dpage{padding:5.5rem 1.2rem 3rem;}
+  .dh{flex-direction:column;}
+  .dh-w{font-size:1.5rem;}
+  .dstats{grid-template-columns:repeat(2,1fr);}
+  .inv-tbl{font-size:.72rem;}
+  .inv-tbl th,.inv-tbl td{padding:.6rem .5rem;}
+
+  /* ADMIN */
+  .apage{padding:5.5rem 1.2rem 3rem;}
+  .ahdr{flex-direction:column;align-items:flex-start;gap:.8rem;}
+  .atabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .atab{white-space:nowrap;padding:.75rem 1rem;font-size:.76rem;}
+  .wrow{grid-template-columns:80px 1fr;gap:.5rem;}
+  .wsv{grid-column:1/-1;}
+  .ait{font-size:.7rem;}
+  .ait th,.ait td{padding:.5rem .5rem;}
+}
+
+/* ── EXTRA SMALL — 480px and below ── */
+@media(max-width:480px){
+  .h-t{font-size:2rem;}
+  .h-stats{grid-template-columns:repeat(2,1fr);}
+  .coin-grid{grid-template-columns:repeat(2,1fr);}
+  .market-strip{grid-template-columns:1fr 1fr;}
+  .dstats{grid-template-columns:1fr 1fr;}
+  .ti-opts{grid-template-columns:1fr 1fr;}
+  .co-opts{grid-template-columns:repeat(5,1fr);}
+  .mbox{padding:1.5rem 1rem;}
+  nav{padding:.75rem 1rem;}
+}
+
+</style>
+</head>
+<body>
+
+<div id="cg"></div>
+<canvas id="sc"></canvas>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav id="nav">
+  <a class="logo-link" onclick="goPage('landing');return false;">
+    <svg class="logo-svg" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lg" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#F0CC76"/><stop offset="100%" stop-color="#A07828"/>
+        </linearGradient>
+        <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#D4A94B" stop-opacity=".2"/>
+          <stop offset="100%" stop-color="#D4A94B" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M23 2 L41 12 L41 34 L23 44 L5 34 L5 12 Z" fill="url(#bg)" stroke="url(#lg)" stroke-width="1.2"/>
+      <path d="M11 31 L18 18 L23 24 L28 14 L35 31" stroke="url(#lg)" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="28" cy="14" r="2.2" fill="url(#lg)"/>
+      <line x1="9" y1="31" x2="37" y2="31" stroke="url(#lg)" stroke-width="1.2" stroke-linecap="round"/>
+      <rect x="11" y="28" width="2.2" height="3" rx=".6" fill="#D4A94B" opacity=".8"/>
+      <rect x="14.5" y="26" width="2.2" height="5" rx=".6" fill="#D4A94B" opacity=".8"/>
+      <rect x="18" y="29" width="2.2" height="2" rx=".6" fill="#D4A94B" opacity=".5"/>
+    </svg>
+    <div class="logo-text">
+      <span class="logo-main">Black Ridge</span>
+      <span class="logo-sub">Capital</span>
+    </div>
+  </a>
+  <div class="nav-mid" id="nav-pub">
+    <a href="#how" data-i18n="nav_how">How It Works</a>
+    <a href="#tiers" data-i18n="nav_tiers">Tiers</a>
+    <a href="#cryptos" data-i18n="nav_assets">Assets</a>
+    <a href="#news" data-i18n="nav_news">Market</a>
+    <a href="#security" data-i18n="nav_security">Security</a>
+    <a href="#faq" data-i18n="nav_faq">FAQ</a>
+  </div>
+  <div class="nav-right">
+    <!-- Language Selector -->
+    <div class="lang-sel">
+      <button class="lang-btn" onclick="toggleLang(event)" id="lang-btn">🌐 EN ▾</button>
+      <div class="lang-dd" id="lang-dd">
+        <div class="lang-opt active" onclick="setLang('en')">🇬🇧 English</div>
+        <div class="lang-opt" onclick="setLang('fr')">🇫🇷 Français</div>
+        <div class="lang-opt" onclick="setLang('es')">🇪🇸 Español</div>
+        <div class="lang-opt" onclick="setLang('ar')">🇸🇦 العربية</div>
+        <div class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</div>
+        <div class="lang-opt" onclick="setLang('pt')">🇧🇷 Português</div>
+        <div class="lang-opt" onclick="setLang('ru')">🇷🇺 Русский</div>
+        <div class="lang-opt" onclick="setLang('hi')">🇮🇳 हिन्दी</div>
+      </div>
+    </div>
+    <div id="nav-auth">
+      <button class="btn btn-ghost" onclick="openM('m-login')" data-i18n="nav_signin">Sign In</button>
+      <button class="btn btn-gold" style="margin-left:.5rem;" onclick="openM('m-signup')" data-i18n="nav_start">Get Started</button>
+    </div>
+    <div id="nav-user" style="display:none;">
+      <button class="btn btn-ghost" id="dash-btn">Dashboard</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:.5rem;" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  <!-- Hamburger -->
+  <button class="hbg" id="hbg" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mob-drawer" id="mob-drawer">
+  <div class="mob-overlay" onclick="closeDrawer()"></div>
+  <div class="mob-panel">
+    <a href="#how" onclick="closeDrawer()">How It Works</a>
+    <a href="#tiers" onclick="closeDrawer()">Tiers</a>
+    <a href="#cryptos" onclick="closeDrawer()">Assets</a>
+    <a href="#news" onclick="closeDrawer()">Market</a>
+    <a href="#security" onclick="closeDrawer()">Security</a>
+    <a href="#faq" onclick="closeDrawer()">FAQ</a>
+    <div class="mob-divider"></div>
+    <div class="mob-auth">
+      <button class="btn btn-ghost" style="width:100%;padding:.75rem;" onclick="closeDrawer();openM('m-login')">Sign In</button>
+      <button class="btn btn-gold" style="width:100%;padding:.75rem;" onclick="closeDrawer();openM('m-signup')">Get Started</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ LANDING ════════════════ -->
+<div id="landing-page" class="page on">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="orb ob1" id="ob1"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#F7931A"/><path d="M22.4 14.1c.3-2.1-1.3-3.2-3.5-4l.7-2.8-1.7-.4-.7 2.7-.5-.1-.5-.1.7-2.7-1.7-.4-.7 2.8-1.3-.3-2.3-.6-.4 1.8s1.3.3 1.2.3c.7.2.8.6.8.9l-.8 3.4c.1 0 .1 0 .2.1h-.2l-1.2 4.7c-.1.2-.3.5-.8.4l-1.2-.3-.8 2 2.2.5.5.1-.7 2.9 1.7.4.7-2.9.5.1.5.1-.7 2.9 1.7.4.7-2.9c3 .6 5.3.4 6.2-2.4.8-2.2-.04-3.5-1.6-4.3 1.1-.3 2-1 2.2-2.5zm-4 5.6c-.6 2.2-4.5 1-5.8.7l1-4.1c1.3.3 5.4 1 4.8 3.4zm.6-5.6c-.5 2-3.8 1-4.8.7l.9-3.7c1 .3 4.3.8 3.9 3z" fill="#fff"/></svg></div>
+  <div class="orb ob2" id="ob2"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#627EEA"/><path d="M16 5v8.5l7.2 3.2L16 5z" fill="#fff" opacity=".6"/><path d="M16 5L8.8 16.7l7.2-3.2V5z" fill="#fff"/><path d="M16 21.8v5.2l7.2-9.9L16 21.8z" fill="#fff" opacity=".6"/><path d="M16 27v-5.2l-7.2-4.7L16 27z" fill="#fff"/><path d="M16 20.5l7.2-4.2-7.2-3.2v7.4z" fill="#fff" opacity=".2"/><path d="M8.8 16.3l7.2 4.2v-7.4l-7.2 3.2z" fill="#fff" opacity=".6"/></svg></div>
+  <div class="orb ob3" id="ob3"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#9945FF"/><path d="M9.5 20.5a.7.7 0 01.5-.2h13.9c.3 0 .5.4.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.6c-.3 0-.5-.4-.3-.6l2.2-2.2zm0-11.2a.7.7 0 01.5-.2h13.9c.3 0 .5.4.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.6c-.3 0-.5-.4-.3-.6l2.2-2.2zm14.8 5.6c-.3 0-.5.4-.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.4c-.3 0-.5-.4-.3-.6l2.2-2.2a.7.7 0 01.5-.2h14.5z" fill="url(#sg2)"/><defs><linearGradient id="sg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00FFA3"/><stop offset="100%" stop-color="#DC1FFF"/></linearGradient></defs></svg></div>
+  <div class="orb ob4" id="ob4"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#00AAE4"/><path d="M23 8h2.8l-6 5.9c-2.1 2-5.4 2-7.5 0L6.2 8H9l4.6 4.5c1.3 1.3 3.5 1.3 4.8 0L23 8zm-13 16H7.2l6-5.9c2.1-2 5.4-2 7.5 0l6.1 5.9H24l-4.6-4.5c-1.3-1.3-3.5-1.3-4.8 0L10 24z" fill="#fff"/></svg></div>
+  <div class="orb ob5" id="ob5"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#F3BA2F"/><path d="M12.1 14.5L16 10.6l3.9 3.9 2.3-2.3L16 6 9.8 12.2l2.3 2.3zM6 16l2.3-2.3L10.6 16l-2.3 2.3L6 16zm6.1 1.5L16 21.4l3.9-3.9 2.3 2.3L16 26l-6.2-6.2-.1-.1 2.4-2.2zm9.3-1.5l2.3-2.3L26 16l-2.3 2.3L21.4 16zm-5.4 0l-2.3-2.3 2.3-2.3 2.3 2.3-2.3 2.3z" fill="#fff"/></svg></div>
+  <div class="hero-inner">
+    <div class="h-ey"><div class="ld"></div><span data-i18n="hero_badge">Live Investment Platform — 10 Cryptocurrencies</span></div>
+    <h1 class="h-t">
+      <span class="w1" data-i18n="hero_line1">The Smarter Way to</span>
+      <span class="w2" data-i18n="hero_line2">Grow Digital Wealth</span>
+    </h1>
+    <p class="h-s" data-i18n="hero_sub">Black Ridge Capital delivers structured crypto investment tiers with 50% weekly returns. Professional-grade security, transparent process, and results that speak for themselves.</p>
+    <div class="h-ctas">
+      <button class="btn btn-gold btn-lg" onclick="openM('m-signup')" data-i18n="hero_cta1">Start Investing Now</button>
+      <button class="btn btn-ghost btn-lg" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})" data-i18n="hero_cta2">Explore How It Works</button>
+    </div>
+    <div class="h-stats">
+      <div class="h-st"><div class="h-sn" id="cnt1">$0M+</div><span class="h-sl" data-i18n="stat1">Assets Managed</span></div>
+      <div class="h-st"><div class="h-sn" id="cnt2">0+</div><span class="h-sl" data-i18n="stat2">Active Investors</span></div>
+      <div class="h-st"><div class="h-sn">50%</div><span class="h-sl" data-i18n="stat3">Weekly ROI</span></div>
+      <div class="h-st"><div class="h-sn">10</div><span class="h-sl" data-i18n="stat4">Cryptocurrencies</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar"><div class="tk-inner" id="ticker"></div></div>
+
+<!-- FEATURED -->
+<section id="featured" style="background:var(--bg-featured);">
+  <div class="container">
+    <div class="rv tc">
+      <span class="ft-lbl" style="font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);display:block;margin-bottom:1.4rem;" data-i18n="feat_label">As Seen On &amp; Trusted By Leading Platforms</span>
+      <div class="feat-logos">
+        <div class="feat-logo"><div class="feat-logo-mark">Forbes</div><div class="feat-logo-name">Media</div></div>
+        <div class="feat-logo"><div class="feat-logo-mark">Bloomberg</div><div class="feat-logo-name">Finance</div></div>
+        <div class="feat-logo"><div class="feat-logo-mark">CoinDesk</div><div class="feat-logo-name">Crypto</div></div>
+        <div class="feat-logo"><div class="feat-logo-mark">Binance</div><div class="feat-logo-name">Exchange</div></div>
+        <div class="feat-logo"><div class="feat-logo-mark">CryptoNews</div><div class="feat-logo-name">Media</div></div>
+        <div class="feat-logo"><div class="feat-logo-mark">Reuters</div><div class="feat-logo-name">News</div></div>
+      </div>
+      <div class="feat-badge" style="margin:0 auto;display:inline-flex;">✓ <span data-i18n="feat_badge">Verified &amp; Trusted by 3,800+ Investors Worldwide</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:var(--bg-how);">
+  <div class="container">
+    <div class="tc rv"><span class="chip" data-i18n="how_chip">Process</span>
+      <h2 class="sec-h" data-i18n="how_title">Simple Steps to <em>Start Earning</em></h2>
+      <p class="sec-p" data-i18n="how_sub">From sign-up to weekly returns — four seamless steps and you're growing digital wealth.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv d1"><div class="step-n">01</div><div class="step-ico">👤</div><h3 data-i18n="s1h">Create Your Account</h3><p data-i18n="s1p">Sign up in under 2 minutes. Your identity is secured with encryption and your data is never shared.</p></div>
+      <div class="step rv d2"><div class="step-n">02</div><div class="step-ico">📊</div><h3 data-i18n="s2h">Pick Your Tier</h3><p data-i18n="s2p">Choose Bronze, Silver, Gold or Platinum — all plans deliver 50% weekly returns on your capital.</p></div>
+      <div class="step rv d3"><div class="step-n">03</div><div class="step-ico">💸</div><h3 data-i18n="s3h">Fund &amp; Confirm</h3><p data-i18n="s3p">Select a cryptocurrency, send to our secure wallet, and submit your transaction hash as proof.</p></div>
+      <div class="step rv d4"><div class="step-n">04</div><div class="step-ico">📈</div><h3 data-i18n="s4h">Receive Weekly Returns</h3><p data-i18n="s4p">Payment confirmed within 24 hours. Your 50% returns hit your crypto wallet every single week.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section id="tiers" style="background:var(--bg-tiers);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="tier_chip">Investment Plans</span>
+      <h2 class="sec-h" data-i18n="tier_title">Choose Your <em>Investment Tier</em></h2>
+      <p class="sec-p" data-i18n="tier_sub">Every plan delivers 50% weekly returns on your capital. Pick the tier that matches your ambition.</p>
+    </div>
+    <div class="tiers-wrap" id="tiers-wrap"></div>
+  </div>
+</section>
+
+<!-- CRYPTOS -->
+<section id="cryptos" style="background:var(--bg-cryptos);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="crypto_chip">Supported Assets</span>
+      <h2 class="sec-h" data-i18n="crypto_title">Invest in <em>10 Cryptocurrencies</em></h2>
+      <p class="sec-p" data-i18n="crypto_sub">All major digital assets available on one platform. Invest with the coins you trust.</p>
+    </div>
+    <div class="coin-grid" id="coin-grid"></div>
+  </div>
+</section>
+
+<!-- NEWS / MARKET -->
+<section id="news" style="background:var(--bg-news);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="news_chip">Market Intelligence</span>
+      <h2 class="sec-h" data-i18n="news_title">Latest <em>Market Updates</em></h2>
+      <p class="sec-p" data-i18n="news_sub">Stay informed with real-time crypto insights, market trends, and expert analysis.</p>
+    </div>
+    <div class="market-strip" id="mkt-strip"></div>
+    <div class="news-grid" id="news-grid"></div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="security" style="background:var(--bg-security);">
+  <div class="container">
+    <div class="sec-wrap">
+      <div class="rv">
+        <span class="chip" data-i18n="sec_chip">Your Peace of Mind</span>
+        <h2 class="sec-h" data-i18n="sec_title">Your Investment Is <em>100% Protected</em></h2>
+        <p class="sec-p" style="margin-bottom:2.2rem;" data-i18n="sec_sub">We built Black Ridge Capital from the ground up with institutional-grade security. You invest — we protect. No compromises, no exceptions.</p>
+        <div class="sf-list">
+          <div class="sf rv d1"><div class="sf-ico">🔐</div><div><h4 data-i18n="sf1h">256-Bit AES Encryption</h4><p data-i18n="sf1p">All data, accounts and transactions are secured with military-grade encryption. Your information is impenetrable.</p></div></div>
+          <div class="sf rv d2"><div class="sf-ico">🧊</div><div><h4 data-i18n="sf2h">Cold Wallet Storage</h4><p data-i18n="sf2p">The majority of investor funds are held in offline cold storage — completely immune to online threats.</p></div></div>
+          <div class="sf rv d3"><div class="sf-ico">👁️</div><div><h4 data-i18n="sf3h">24/7 Real-Time Monitoring</h4><p data-i18n="sf3p">Every transaction is monitored continuously. Suspicious activity is flagged and blocked immediately.</p></div></div>
+          <div class="sf rv d4"><div class="sf-ico">✅</div><div><h4 data-i18n="sf4h">Manual Verification Layer</h4><p data-i18n="sf4p">Every investment is manually verified by our compliance team before activation — zero automated errors.</p></div></div>
+        </div>
+      </div>
+      <div class="sec-visual rv d2">
+        <div class="sv-glow"></div>
+        <div class="sv-ring sv-r1"><div class="sv-dot" style="top:-4px;left:50%;transform:translateX(-50%);"></div></div>
+        <div class="sv-ring sv-r2"><div class="sv-dot" style="top:18%;right:-4px;background:var(--ok);box-shadow:0 0 10px var(--ok);"></div><div class="sv-dot" style="bottom:18%;left:-4px;background:var(--ok);box-shadow:0 0 8px var(--ok);"></div></div>
+        <div class="sv-ring sv-r3"></div>
+        <div class="sv-center">🔒</div>
+        <div style="position:absolute;top:8%;right:2%;background:rgba(10,16,28,.95);border:1px solid var(--b1);border-radius:12px;padding:.95rem 1.1rem;min-width:148px;animation:fl2 7s ease-in-out infinite;">
+          <div style="font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem;">Security Level</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--ok);font-weight:700;">MAXIMUM</div>
+          <div style="height:4px;background:rgba(255,255,255,.05);border-radius:2px;margin-top:.45rem;overflow:hidden;"><div style="width:96%;height:100%;background:linear-gradient(90deg,var(--ok),var(--g1));border-radius:2px;"></div></div>
+        </div>
+        <div style="position:absolute;bottom:12%;left:0;background:rgba(10,16,28,.95);border:1px solid var(--b1);border-radius:12px;padding:.95rem 1.1rem;min-width:155px;animation:fl1 8s ease-in-out infinite 1s;">
+          <div style="font-size:.65rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem;">Funds Protected</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--g1);font-weight:700;">$24M+</div>
+          <div style="font-size:.7rem;color:var(--ok);margin-top:.28rem;">▲ 100% Secure Record</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" style="background:var(--bg-why);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="why_chip">Why Black Ridge Capital</span>
+      <h2 class="sec-h" data-i18n="why_title">Built for <em>Serious Investors</em></h2>
+      <p class="sec-p" data-i18n="why_sub">We combine institutional discipline with accessible crypto investment — so anyone can build wealth professionally.</p>
+    </div>
+    <div class="why-grid">
+      <div class="wc rv d1"><div class="wc-n">01</div><h3 data-i18n="w1h">Transparent Returns</h3><p data-i18n="w1p">50% weekly ROI — disclosed clearly, paid reliably. No hidden fees, no confusing structures, ever.</p></div>
+      <div class="wc rv d2"><div class="wc-n">02</div><h3 data-i18n="w2h">Global Accessibility</h3><p data-i18n="w2p">Invest from anywhere in the world. Our platform operates 24/7 across all time zones and devices.</p></div>
+      <div class="wc rv d3"><div class="wc-n">03</div><h3 data-i18n="w3h">Fast Confirmations</h3><p data-i18n="w3p">Our compliance team verifies every investment within 24 hours. Returns start immediately after confirmation.</p></div>
+      <div class="wc rv d4"><div class="wc-n">04</div><h3 data-i18n="w4h">10 Crypto Options</h3><p data-i18n="w4p">From Bitcoin to Cardano — choose any of 10 leading digital assets to fund your investment.</p></div>
+      <div class="wc rv d5"><div class="wc-n">05</div><h3 data-i18n="w5h">🇺🇸 US-Based Live Support</h3><p data-i18n="w5p">Our customer service team is US-based and available via live chat 24/7. Real humans — no bots — ready to assist you from our offices in the United States.</p></div>
+      <div class="wc rv d6"><div class="wc-n">06</div><h3 data-i18n="w6h">Proven Track Record</h3><p data-i18n="w6p">Thousands of investors. Millions managed. A history of delivering exactly what we promise, every week.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi" style="background:var(--bg-testi);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="testi_chip">Investor Stories</span>
+      <h2 class="sec-h" data-i18n="testi_title">Trusted by <em>Thousands Worldwide</em></h2>
+    </div>
+    <div class="tg">
+      <div class="tcard rv d1"><div class="tstars">★★★★★</div><p class="ttext" data-i18n="t1">"Started with $200 on Bronze. My first weekly return was confirmed in 18 hours. I've since moved to Gold. The platform is flawless."</p><div class="tau"><div class="tav" style="background:linear-gradient(135deg,#E8A068,#CD7F32);">AO</div><div><div class="tname">Adebayo Okafor</div><div class="tloc">Lagos, Nigeria</div></div></div></div>
+      <div class="tcard rv d2"><div class="tstars">★★★★★</div><p class="ttext" data-i18n="t2">"The transparency here is incredible — you see the wallet address, send the crypto, and within a day your investment is active. 50% returns every week."</p><div class="tau"><div class="tav" style="background:linear-gradient(135deg,#7986CB,#3949AB);">SR</div><div><div class="tname">Sophia Reynolds</div><div class="tloc">London, UK</div></div></div></div>
+      <div class="tcard rv d3"><div class="tstars">★★★★★</div><p class="ttext" data-i18n="t3">"I'm on Platinum now. The weekly returns are life-changing. Black Ridge Capital is the only platform that delivers exactly what it promises."</p><div class="tau"><div class="tav" style="background:linear-gradient(135deg,#4CAF50,#2E7D32);">KL</div><div><div class="tname">Kevin Liu</div><div class="tloc">Singapore</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--bg-faq);">
+  <div class="container">
+    <div class="tc rv">
+      <span class="chip" data-i18n="faq_chip">FAQ</span>
+      <h2 class="sec-h" data-i18n="faq_title">Questions <em>Answered</em></h2>
+    </div>
+    <div class="faq-w" id="faq-body"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" style="background:var(--bg-faq);">
+  <div class="container">
+    <div class="cta-box rv">
+      <h2 data-i18n="cta_title">Start Growing Your <em style="color:var(--g1)">Wealth Today</em></h2>
+      <p data-i18n="cta_sub">Join thousands of investors already earning 50% weekly returns with Black Ridge Capital. It takes less than 2 minutes to get started.</p>
+      <button class="btn btn-gold btn-lg" onclick="openM('m-signup')" data-i18n="cta_btn">Create Free Account →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg width="34" height="34" viewBox="0 0 46 46" fill="none"><defs><linearGradient id="flg" x1="0" y1="0" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F0CC76"/><stop offset="100%" stop-color="#A07828"/></linearGradient></defs><path d="M23 2 L41 12 L41 34 L23 44 L5 34 L5 12 Z" fill="none" stroke="url(#flg)" stroke-width="1.2"/><path d="M11 31 L18 18 L23 24 L28 14 L35 31" stroke="url(#flg)" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="14" r="2.2" fill="url(#flg)"/><line x1="9" y1="31" x2="37" y2="31" stroke="url(#flg)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:#fff;">Black Ridge <span style="color:var(--g1)">Capital</span></div><div style="font-size:.52rem;letter-spacing:.2em;color:var(--g3);text-transform:uppercase;">Premium Crypto Investment</div></div>
+        </div>
+        <p data-i18n="ft_about">Your trusted partner in professional cryptocurrency investment. Growing digital wealth for investors worldwide since 2021.</p>
+      </div>
+      <div class="ft-col"><h5 data-i18n="ft_platform">Platform</h5><a href="#how" data-i18n="nav_how">How It Works</a><a href="#tiers" data-i18n="nav_tiers">Investment Tiers</a><a href="#cryptos" data-i18n="nav_assets">Assets</a><a href="#security" data-i18n="nav_security">Security</a></div>
+      <div class="ft-col"><h5 data-i18n="ft_account">Account</h5><a onclick="openM('m-signup')" data-i18n="nav_start">Create Account</a><a onclick="openM('m-login')" data-i18n="nav_signin">Sign In</a><a onclick="openM('m-tc')" data-i18n="ft_terms">Terms &amp; Conditions</a></div>
+      <div class="ft-col"><h5 data-i18n="ft_support">Support</h5><a data-i18n="ft_live">🇺🇸 Live Chat — US-Based Team (24/7)</a><a href="#faq" data-i18n="nav_faq">FAQ</a><a data-i18n="ft_contact">Contact Us</a><div style="margin-top:.75rem;padding:.45rem .8rem;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18);border-radius:8px;font-size:.7rem;color:var(--ok);display:inline-flex;align-items:center;gap:.4rem;">🇺🇸 US-Based Customer Service</div></div>
+    </div>
+    <div class="ft-bot">
+      <div class="ft-copy">© 2025 Black Ridge Capital. All rights reserved.</div>
+      <div class="ft-disc" data-i18n="ft_disc">Investment in cryptocurrency involves significant risk. Past returns do not guarantee future results. Invest only what you can afford. Black Ridge Capital is not liable for market volatility losses.</div>
+    </div>
+  </div>
+</footer>
+</div><!-- /landing -->
+
+<!-- ════════ DASHBOARD ════════ -->
+<div id="dashboard-page" class="page">
+  <div class="dpage">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="dh">
+        <div><div class="dh-w">Welcome back, <em id="du-name">Investor</em></div><div class="dh-s">Track your investments and portfolio in real time</div></div>
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap;">
+          <button class="btn btn-ghost" onclick="openM('m-withdraw')" style="border-color:rgba(212,169,75,.4);">💸 Withdraw</button>
+          <button class="btn btn-gold" onclick="openInvest()">+ New Investment</button>
+        </div>
+      </div>
+      <div class="dstats">
+        <div class="ds"><div class="ds-l">Total Invested</div><div class="ds-v" id="d-total">$0</div></div>
+        <div class="ds"><div class="ds-l">Active Investments</div><div class="ds-v" id="d-active">0</div></div>
+        <div class="ds"><div class="ds-l">Expected Weekly Return (50%)</div><div class="ds-v" id="d-ret">$0</div></div>
+        <div class="ds"><div class="ds-l">Member Since</div><div class="ds-v" style="font-size:1rem;" id="d-since">—</div></div>
+      </div>
+      <div class="dsec">My Investments</div>
+      <div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;">
+        <table class="inv-tbl">
+          <thead><tr><th>Date</th><th>Tier</th><th>Crypto</th><th>Amount</th><th>Weekly Return (50%)</th><th>Status</th></tr></thead>
+          <tbody id="d-tbody"><tr><td colspan="6" class="emp">No investments yet. Click "+ New Investment" to begin your journey.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ADMIN ════════ -->
+<div id="admin-page" class="page">
+  <div class="apage">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="ahdr"><div class="atitle">Admin <em>Panel</em></div><button class="btn btn-danger" onclick="doLogout()">Logout</button></div>
+      <div class="atabs">
+        <button class="atab on" onclick="swTab(this,'a-inv')">Investments <span class="nbadge" id="pend-c">0</span></button>
+        <button class="atab" onclick="swTab(this,'a-wal')">Wallet Addresses</button>
+        <button class="atab" onclick="swTab(this,'a-wdr')">Withdrawals <span class="nbadge" id="wdr-c">0</span></button>
+        <button class="atab" onclick="swTab(this,'a-not')">Notifications <span class="nbadge" id="notif-c">0</span></button>
+      </div>
+      <div id="a-inv" class="ac on"><div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;"><table class="ait"><thead><tr><th>Date</th><th>Investor</th><th>Email</th><th>Tier</th><th>Crypto</th><th>Amount</th><th>TX Hash</th><th>Status</th><th>Actions</th></tr></thead><tbody id="a-tbody"></tbody></table></div></div>
+      <div id="a-wal" class="ac">
+        <div id="wfix-diag" style="background:rgba(8,14,26,.9);border:1px solid var(--b2);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1rem;display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">
+            <span style="font-size:.78rem;font-weight:700;color:var(--t2);">Wallet Diagnostic</span>
+            <button onclick="document.getElementById('wfix-diag').style.display='none'" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem;">x</button>
+          </div>
+          <div id="wfix-log" style="font-family:'Fira Code',monospace;font-size:.72rem;line-height:1.9;color:var(--t2);max-height:200px;overflow-y:auto;"></div>
+        </div>
+        <div id="wfix-sql-wrap" style="background:rgba(8,14,26,.9);border:1px solid rgba(240,204,118,.2);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1rem;display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+            <span style="font-size:.78rem;font-weight:700;color:#F0CC76;">Run this SQL in Supabase SQL Editor, then try saving again</span>
+            <button id="wfix-copy-btn" onclick="wfixCopySQL()" style="background:rgba(240,204,118,.12);border:1px solid rgba(240,204,118,.3);color:#F0CC76;border-radius:6px;padding:.3rem .8rem;font-size:.7rem;cursor:pointer;font-family:'Outfit',sans-serif;">Copy SQL</button>
+          </div>
+          <pre id="wfix-sql" style="font-family:'Fira Code',monospace;font-size:.66rem;line-height:1.7;color:#7090D0;white-space:pre-wrap;word-break:break-all;max-height:220px;overflow-y:auto;user-select:all;cursor:text;"></pre>
+        </div>
+        <div id="wal-mgr"></div>
+      </div>
+      <div id="a-wdr" class="ac"><div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;"><table class="ait"><thead><tr><th>Date</th><th>Investor</th><th>Email</th><th>Amount</th><th>Crypto</th><th>Wallet Address</th><th>Notes</th><th>Status</th><th>Action</th></tr></thead><tbody id="wdr-tbody"><tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr></tbody></table></div></div>
+      <div id="a-not" class="ac"><div id="notif-body"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODALS ════════ -->
+<!-- LOGIN -->
+<div class="mo" id="m-login"><div class="mbox"><button class="mcl" onclick="closeM('m-login')">×</button><h2 data-i18n="login_title">Welcome Back</h2><div class="msub" data-i18n="login_sub">Sign in to your Black Ridge Capital account</div><div id="le" style="display:none;" class="ferr"></div><div class="fg"><label>Email</label><input type="email" id="l-email" placeholder="you@email.com"/></div><div class="fg"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••"/></div><div style="text-align:right;margin-top:-.4rem;margin-bottom:.9rem;"><a onclick="swM('m-login','m-forgot')" style="font-size:.78rem;color:var(--g1);cursor:pointer;font-weight:600;text-decoration:none;">Forgot password?</a></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doLogin()" data-i18n="login_btn">Sign In</button><div class="ml" data-i18n="login_link">Don't have an account? <a onclick="swM('m-login','m-signup')">Create one free</a></div></div></div>
+
+<!-- WITHDRAWAL -->
+<div class="mo" id="m-withdraw"><div class="mbox"><button class="mcl" onclick="closeM('m-withdraw')">×</button><h2>Request Withdrawal</h2><div class="msub">Submit a withdrawal request and our team will process it within 24–48 hours</div><div id="we" style="display:none;" class="ferr"></div><div id="ws" style="display:none;" class="fok"></div><div class="fg"><label>Amount (USD)</label><input type="number" id="w-amt" placeholder="e.g. 500" min="1"/></div><div class="fg"><label>Crypto to Receive</label><select id="w-coin" style="width:100%;background:var(--inp-bg);border:1px solid var(--b2);border-radius:10px;padding:.75rem 1rem;color:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;"><option value="">Select crypto...</option><option>BTC</option><option>ETH</option><option>USDT</option><option>BNB</option><option>SOL</option><option>XRP</option><option>LTC</option><option>DOGE</option><option>SUI</option><option>ADA</option></select></div><div class="fg"><label>Your Wallet Address</label><input type="text" id="w-addr" placeholder="Enter your receiving wallet address"/></div><div class="fg"><label>Message / Notes (optional)</label><textarea id="w-note" placeholder="Any additional details..." style="width:100%;background:var(--inp-bg);border:1px solid var(--b2);border-radius:10px;padding:.75rem 1rem;color:#fff;font-family:'Outfit',sans-serif;font-size:.9rem;resize:vertical;min-height:80px;"></textarea></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="submitWithdrawal()">Submit Withdrawal Request</button><div class="ml"><a onclick="closeM('m-withdraw')">Cancel</a></div></div></div>
+
+<!-- FORGOT PASSWORD -->
+<div class="mo" id="m-forgot"><div class="mbox"><button class="mcl" onclick="closeM('m-forgot')">×</button><h2>Reset Password</h2><div class="msub">Enter your email and we'll send you a reset link</div><div id="fe" style="display:none;" class="ferr"></div><div id="fs" style="display:none;" class="fok"></div><div class="fg"><label>Email</label><input type="email" id="f-email" placeholder="you@email.com"/></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doForgot()">Send Reset Link</button><div class="ml"><a onclick="swM('m-forgot','m-login')">← Back to Sign In</a></div></div></div>
+
+<!-- SIGNUP -->
+<div class="mo" id="m-signup"><div class="mbox"><button class="mcl" onclick="closeM('m-signup')">×</button><h2 data-i18n="signup_title">Get Started</h2><div class="msub" data-i18n="signup_sub">Create your free Black Ridge Capital investor account</div><div id="se" style="display:none;" class="ferr"></div><div id="ss" style="display:none;" class="fok"></div><div class="frow"><div class="fg"><label data-i18n="f_fname">First Name</label><input type="text" id="s-fn" placeholder="John"/></div><div class="fg"><label data-i18n="f_lname">Last Name</label><input type="text" id="s-ln" placeholder="Doe"/></div></div><div class="fg"><label>Email</label><input type="email" id="s-em" placeholder="you@email.com"/></div><div class="fg"><label data-i18n="f_phone">Phone</label><input type="tel" id="s-ph" placeholder="+1 234 567 8900"/></div><div class="fg"><label>Password</label><input type="password" id="s-pw" placeholder="Min. 6 characters"/></div><div class="tc-agree-row"><input type="checkbox" id="tc-chk"/><label for="tc-chk" data-i18n="tc_agree">I agree to the <a onclick="swM('m-signup','m-tc')">Terms &amp; Conditions</a> and confirm I am 18 years or older. I understand crypto investments carry risk.</label></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doSignup()" data-i18n="signup_btn">Create Account</button><div class="ml" data-i18n="signup_link">Already have an account? <a onclick="swM('m-signup','m-login')">Sign in</a></div></div></div>
+
+</div>
+
+<!-- TERMS & CONDITIONS -->
+<div class="mo" id="m-tc">
+  <div class="mbox" style="max-width:560px;">
+    <button class="mcl" onclick="closeM('m-tc')">×</button>
+    <h2 data-i18n="tc_title">Terms &amp; Conditions</h2>
+    <div class="msub" data-i18n="tc_sub">Please read carefully before investing</div>
+    <div class="tc-modal-text">
+      <h5>1. Acceptance of Terms</h5>
+      By creating an account and investing with Black Ridge Capital, you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our platform.
+      <h5>2. Investment Risk Disclosure</h5>
+      Cryptocurrency investments carry significant financial risk. Past performance does not guarantee future results. You may lose part or all of your invested capital. Only invest funds you can afford to lose. Black Ridge Capital is not liable for losses resulting from market volatility.
+      <h5>3. Eligibility</h5>
+      You must be at least 18 years of age (or the legal age of majority in your jurisdiction) to use this platform. By registering, you confirm that you meet this requirement. It is your responsibility to ensure compliance with the laws of your country regarding cryptocurrency investment.
+      <h5>4. Account Responsibility</h5>
+      You are solely responsible for maintaining the confidentiality of your account credentials. Black Ridge Capital will never ask for your password. You are responsible for all activities that occur under your account.
+      <h5>5. Investment Process</h5>
+      Investments are processed manually by our compliance team. Confirmation typically occurs within 24 hours of a verified transaction. Weekly returns of 50% are calculated on the confirmed invested amount and paid to your designated cryptocurrency wallet.
+      <h5>6. Returns &amp; Payments</h5>
+      The advertised 50% weekly ROI is subject to market conditions and operational capacity. Returns are paid in the same cryptocurrency used for investment. Black Ridge Capital reserves the right to adjust return rates with 7 days written notice to investors.
+      <h5>7. Withdrawals</h5>
+      To initiate a withdrawal of principal or returns, contact our support team via live chat or email. Withdrawal timelines may vary depending on network conditions and verification requirements.
+      <h5>8. Prohibited Activities</h5>
+      You agree not to use this platform for money laundering, fraud, or any illegal activity. Black Ridge Capital complies with applicable AML/KYC regulations and reserves the right to suspend accounts under investigation.
+      <h5>9. Privacy Policy</h5>
+      We collect and process personal data in accordance with applicable data protection laws. Your data is never sold to third parties. We use industry-standard security measures to protect your personal information.
+      <h5>10. Limitation of Liability</h5>
+      Black Ridge Capital shall not be liable for any indirect, incidental, or consequential damages arising from your use of the platform. Our total liability shall not exceed the amount of your most recent investment.
+      <h5>11. Governing Law</h5>
+      These Terms are governed by applicable international financial regulations. Any disputes shall be resolved through binding arbitration.
+      <h5>12. Amendments</h5>
+      Black Ridge Capital reserves the right to amend these Terms at any time. Continued use of the platform after changes constitutes acceptance of the updated Terms.
+    </div>
+    <button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="closeM('m-tc')">I Understand — Close</button>
+  </div>
+</div>
+
+<!-- INVEST MODAL -->
+<div class="mo" id="m-invest">
+  <div class="mbox" style="max-width:530px;">
+    <button class="mcl" onclick="closeM('m-invest')">×</button>
+    <h2>New Investment</h2><div class="msub" id="inv-lbl">Step 1 of 3 — Choose Your Tier</div>
+    <div class="istep on" id="is1">
+      <div class="ti-opts">
+        <div class="tio" onclick="pickTier('Bronze',100,this)"><div class="tio-n">🥉 Bronze</div><div class="tio-m">Min $100</div><div class="tio-r">50% weekly ROI</div></div>
+        <div class="tio" onclick="pickTier('Silver',500,this)"><div class="tio-n">🥈 Silver</div><div class="tio-m">Min $500</div><div class="tio-r">50% weekly ROI</div></div>
+        <div class="tio" onclick="pickTier('Gold',1000,this)"><div class="tio-n">🥇 Gold</div><div class="tio-m">Min $1,000</div><div class="tio-r">50% weekly ROI</div></div>
+        <div class="tio" onclick="pickTier('Platinum',5000,this)"><div class="tio-n">💎 Platinum</div><div class="tio-m">Min $5,000</div><div class="tio-r">50% weekly ROI</div></div>
+      </div>
+      <div class="fg"><label>Investment Amount (USD)</label><input type="number" id="inv-amt" placeholder="Enter amount"/></div>
+      <button class="btn btn-gold" style="width:100%;padding:.85rem;" onclick="iNext1()">Continue →</button>
+    </div>
+    <div class="istep" id="is2"><div class="co-opts" id="co-opts"></div><div class="sbtns"><button class="btn btn-ghost" onclick="goIS(1)">← Back</button><button class="btn btn-gold" onclick="iNext2()">Continue →</button></div></div>
+    <div class="istep" id="is3">
+      <div class="isum" id="inv-sum"></div>
+      <div class="wbox"><div class="wlbl">Send <span id="pay-sym"></span> to this wallet address:</div><div class="waddr" id="pay-addr">Loading...</div><button class="wcp" onclick="cpWallet()">📋 Copy Address</button></div>
+      <div class="fg"><label>Transaction Hash (optional)</label><input type="text" id="inv-tx" placeholder="Paste transaction hash"/></div>
+      <div style="font-size:.75rem;color:var(--t3);margin-bottom:.9rem;line-height:1.7;">Send your crypto then click Confirm. Our team verifies within 24 hours.</div>
+      <div class="sbtns"><button class="btn btn-ghost" onclick="goIS(2)">← Back</button><button class="btn btn-gold" onclick="submitInv()">Confirm Investment ✓</button></div>
+    </div>
+    <div class="istep" id="is4">
+      <div style="text-align:center;padding:2.5rem 0;">
+        <div style="font-size:3.5rem;margin-bottom:1.2rem;display:inline-block;animation:bounceIn .5s ease;">✅</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:#fff;margin-bottom:.7rem;font-weight:600;">Investment Submitted!</h3>
+        <p style="font-size:.86rem;color:var(--t2);line-height:1.82;margin-bottom:1.9rem;">Your investment has been recorded. Our team verifies within 24 hours. Track your status in the dashboard.</p>
+        <button class="btn btn-gold btn-lg" onclick="closeM('m-invest');renderDash()">View My Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Animated Live Chat Button -->
+<div id="chat-fab" onclick="openChatFAB()" title="Chat with US-Based Support" style="position:fixed;bottom:28px;right:28px;z-index:1999;cursor:pointer;">
+  <!-- Outer pulse ring -->
+  <div style="position:absolute;inset:0;border-radius:50%;background:rgba(0,229,160,.18);animation:chatPulse 2s ease-in-out infinite;"></div>
+  <div style="position:absolute;inset:-6px;border-radius:50%;background:rgba(0,229,160,.08);animation:chatPulse 2s ease-in-out infinite .4s;"></div>
+  <!-- Main button -->
+  <div style="position:relative;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#0B2340,#0D1E35);border:2px solid rgba(0,229,160,.5);box-shadow:0 6px 28px rgba(0,229,160,.25),0 2px 8px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;transition:transform .2s;" id="chat-icon-wrap">
+    <!-- Chat bubble SVG -->
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M13 2C7.48 2 3 6.26 3 11.5c0 2.14.74 4.12 1.97 5.72L3.5 21.5l4.72-1.42A10.2 10.2 0 0013 21c5.52 0 10-4.26 10-9.5S18.52 2 13 2z" fill="#00E5A0" opacity=".15"/>
+      <path d="M13 2C7.48 2 3 6.26 3 11.5c0 2.14.74 4.12 1.97 5.72L3.5 21.5l4.72-1.42A10.2 10.2 0 0013 21c5.52 0 10-4.26 10-9.5S18.52 2 13 2z" stroke="#00E5A0" stroke-width="1.5" fill="none"/>
+      <circle cx="9" cy="11.5" r="1.2" fill="#00E5A0"/>
+      <circle cx="13" cy="11.5" r="1.2" fill="#00E5A0"/>
+      <circle cx="17" cy="11.5" r="1.2" fill="#00E5A0"/>
+    </svg>
+    <!-- Online dot -->
+    <div style="position:absolute;top:4px;right:4px;width:10px;height:10px;background:#00E5A0;border-radius:50%;border:2px solid #0D1E35;animation:chatDot 1.5s ease-in-out infinite;"></div>
+  </div>
+  <!-- Tooltip label -->
+  <div id="chat-tooltip" style="position:absolute;right:68px;bottom:50%;transform:translateY(50%);background:#0D1E35;border:1px solid rgba(0,229,160,.3);border-radius:8px;padding:.38rem .7rem;white-space:nowrap;font-family:'Outfit',sans-serif;font-size:.7rem;color:#fff;opacity:0;transition:opacity .2s;pointer-events:none;">
+    <div style="font-weight:700;">🇺🇸 US Support</div>
+    <div style="color:#00E5A0;font-size:.62rem;">● Online Now</div>
+    <div style="position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid rgba(0,229,160,.3);"></div>
+  </div>
+</div>
+<style>
+@keyframes chatPulse{0%,100%{transform:scale(1);opacity:.6;}50%{transform:scale(1.35);opacity:0;}}
+@keyframes chatDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+#chat-fab:hover #chat-icon-wrap{transform:scale(1.08);}
+#chat-fab:hover #chat-tooltip{opacity:1;}
+</style>
+
+<!-- TAWK.TO (hidden default button - we use our own FAB above) -->
+<script>
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+Tawk_API.onLoad=function(){Tawk_API.hideWidget();};
+function openChatFAB(){if(typeof Tawk_API!=='undefined'&&Tawk_API.maximize){Tawk_API.maximize();}else{window.open('https://tawk.to/chat/6a08cdc748766c1c39bdc7e0/default','_blank','width=400,height=600');}}
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/6a08cdc748766c1c39bdc7e0/default';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+
+<script>
+// ════════════════════════════════════════════
+// I18N TRANSLATIONS
+// ════════════════════════════════════════════
+const T={
+  en:{nav_how:'How It Works',nav_tiers:'Tiers',nav_assets:'Assets',nav_news:'Market',nav_security:'Security',nav_faq:'FAQ',nav_signin:'Sign In',nav_start:'Get Started',hero_badge:'Live Investment Platform — 10 Cryptocurrencies',hero_line1:'The Smarter Way to',hero_line2:'Grow Digital Wealth',hero_sub:'Black Ridge Capital delivers structured crypto investment tiers with 50% weekly returns. Professional-grade security, transparent process, results that speak for themselves.',hero_cta1:'Start Investing Now',hero_cta2:'Explore How It Works',stat1:'Assets Managed',stat2:'Active Investors',stat3:'Weekly ROI',stat4:'Cryptocurrencies',feat_label:'As Seen On & Trusted By Leading Platforms',feat_badge:'Verified & Trusted by 3,800+ Investors Worldwide',how_chip:'Process',how_title:'Simple Steps to <em>Start Earning</em>',how_sub:'From sign-up to weekly returns — four seamless steps and you\'re growing digital wealth.',s1h:'Create Your Account',s1p:'Sign up in under 2 minutes. Secured with encryption, your data is never shared.',s2h:'Pick Your Tier',s2p:'Choose Bronze, Silver, Gold or Platinum — all plans deliver 50% weekly returns.',s3h:'Fund & Confirm',s3p:'Select a cryptocurrency, send to our secure wallet, submit your transaction hash as proof.',s4h:'Receive Weekly Returns',s4p:'Payment confirmed within 24 hours. Your 50% returns hit your crypto wallet every week.',tier_chip:'Investment Plans',tier_title:'Choose Your <em>Investment Tier</em>',tier_sub:'Every plan delivers 50% weekly returns. Pick the tier that matches your ambition.',crypto_chip:'Supported Assets',crypto_title:'Invest in <em>10 Cryptocurrencies</em>',crypto_sub:'All major digital assets on one platform. Invest with the coins you trust.',news_chip:'Market Intelligence',news_title:'Latest <em>Market Updates</em>',news_sub:'Stay informed with real-time crypto insights, market trends, and expert analysis.',sec_chip:'Your Peace of Mind',sec_title:'Your Investment Is <em>100% Protected</em>',sec_sub:'We built Black Ridge Capital with institutional-grade security. You invest — we protect.',sf1h:'256-Bit AES Encryption',sf1p:'All data and transactions secured with military-grade encryption.',sf2h:'Cold Wallet Storage',sf2p:'Majority of funds held offline — completely immune to online threats.',sf3h:'24/7 Real-Time Monitoring',sf3p:'Every transaction monitored continuously. Suspicious activity blocked immediately.',sf4h:'Manual Verification Layer',sf4p:'Every investment manually verified by our compliance team.',why_chip:'Why Black Ridge Capital',why_title:'Built for <em>Serious Investors</em>',why_sub:'Institutional discipline meets accessible crypto investment.',w1h:'Transparent Returns',w1p:'50% weekly ROI — disclosed clearly, paid reliably. No hidden fees.',w2h:'Global Accessibility',w2p:'Invest from anywhere. Our platform runs 24/7 across all time zones.',w3h:'Fast Confirmations',w3p:'Compliance team verifies every investment within 24 hours.',w4h:'10 Crypto Options',w4p:'Bitcoin to Cardano — 10 leading digital assets available.',w5h:'Live Support',w5p:'Real humans in live chat around the clock.',w6h:'Proven Track Record',w6p:'Thousands of investors. Millions managed. We always deliver.',testi_chip:'Investor Stories',testi_title:'Trusted by <em>Thousands Worldwide</em>',t1:'"Started with $200 on Bronze. First return confirmed in 18 hours. Moved to Gold. The platform is flawless."',t2:'"The transparency here is incredible. 50% returns every week like clockwork."',t3:'"On Platinum now. The weekly returns are life-changing. Black Ridge always delivers."',faq_chip:'FAQ',faq_title:'Questions <em>Answered</em>',cta_title:'Start Growing Your <em style="color:var(--g1)">Wealth Today</em>',cta_sub:'Join thousands earning 50% weekly returns with Black Ridge Capital. Takes under 2 minutes.',cta_btn:'Create Free Account →',ft_about:'Your trusted partner in professional cryptocurrency investment. Growing digital wealth since 2021.',ft_platform:'Platform',ft_account:'Account',ft_support:'Support',ft_terms:'Terms & Conditions',ft_live:'Live Chat (24/7)',ft_contact:'Contact Us',ft_disc:'Investment in cryptocurrency involves significant risk. Past returns do not guarantee future results.',login_title:'Welcome Back',login_sub:'Sign in to your Black Ridge Capital account',login_btn:'Sign In',login_link:'Don\'t have an account? <a onclick="swM(\'m-login\',\'m-signup\')">Create one free</a>',signup_title:'Get Started',signup_sub:'Create your free Black Ridge Capital investor account',signup_btn:'Create Account',signup_link:'Already have an account? <a onclick="swM(\'m-signup\',\'m-login\')">Sign in</a>',f_fname:'First Name',f_lname:'Last Name',f_phone:'Phone',tc_agree:'I agree to the <a onclick="swM(\'m-signup\',\'m-tc\')">Terms & Conditions</a> and confirm I am 18 years or older.',tc_title:'Terms & Conditions',tc_sub:'Please read carefully before investing'},
+
+  fr:{nav_how:'Comment ça marche',nav_tiers:'Paliers',nav_assets:'Actifs',nav_news:'Marché',nav_security:'Sécurité',nav_faq:'FAQ',nav_signin:'Se connecter',nav_start:'Commencer',hero_line1:'La façon intelligente de',hero_line2:'Faire croître sa richesse',hero_sub:'Black Ridge Capital offre des paliers d\'investissement crypto structurés avec 50% de retour hebdomadaire.',hero_cta1:'Commencer à investir',hero_cta2:'Voir comment ça fonctionne',stat1:'Actifs gérés',stat2:'Investisseurs actifs',stat3:'ROI hebdomadaire',stat4:'Cryptomonnaies',tier_title:'Choisissez votre <em>Palier</em>',tier_sub:'Chaque plan offre 50% de retour hebdomadaire.',cta_btn:'Créer un compte gratuit →'},
+
+  es:{nav_how:'Cómo funciona',nav_tiers:'Niveles',nav_assets:'Activos',nav_news:'Mercado',nav_security:'Seguridad',nav_faq:'FAQ',nav_signin:'Iniciar sesión',nav_start:'Empezar',hero_line1:'La forma inteligente de',hero_line2:'Crecer tu riqueza digital',hero_sub:'Black Ridge Capital ofrece niveles de inversión en criptomonedas con 50% de retorno semanal.',hero_cta1:'Empezar a invertir',hero_cta2:'Cómo funciona',stat1:'Activos gestionados',stat2:'Inversores activos',stat3:'ROI semanal',stat4:'Criptomonedas',cta_btn:'Crear cuenta gratis →'},
+
+  ar:{nav_how:'كيف يعمل',nav_tiers:'المستويات',nav_assets:'الأصول',nav_news:'السوق',nav_security:'الأمان',nav_faq:'الأسئلة',nav_signin:'تسجيل الدخول',nav_start:'ابدأ الآن',hero_line1:'الطريقة الأذكى',hero_line2:'لتنمية ثروتك الرقمية',hero_sub:'بلاك ريدج كابيتال تقدم استثمارات عملات مشفرة بعائد أسبوعي 50٪.',hero_cta1:'ابدأ الاستثمار الآن',hero_cta2:'تعرف على كيفية عمله',stat1:'الأصول المدارة',stat2:'المستثمرون النشطون',stat3:'عائد أسبوعي',stat4:'عملات مشفرة',cta_btn:'إنشاء حساب مجاني →'},
+
+  zh:{nav_how:'工作原理',nav_tiers:'投资级别',nav_assets:'资产',nav_news:'市场',nav_security:'安全',nav_faq:'常见问题',nav_signin:'登录',nav_start:'开始',hero_line1:'更智能的方式',hero_line2:'增长数字财富',hero_sub:'Black Ridge Capital提供结构化加密货币投资，每周50%回报。',hero_cta1:'立即开始投资',hero_cta2:'了解工作原理',stat1:'管理资产',stat2:'活跃投资者',stat3:'每周回报',stat4:'加密货币',cta_btn:'创建免费账户 →'},
+
+  pt:{nav_how:'Como funciona',nav_tiers:'Planos',nav_assets:'Ativos',nav_news:'Mercado',nav_security:'Segurança',nav_faq:'FAQ',nav_signin:'Entrar',nav_start:'Começar',hero_line1:'A forma mais inteligente de',hero_line2:'Crescer sua riqueza digital',hero_sub:'Black Ridge Capital oferece investimentos em criptomoedas com 50% de retorno semanal.',hero_cta1:'Comece a investir',hero_cta2:'Ver como funciona',cta_btn:'Criar conta grátis →'},
+
+  ru:{nav_how:'Как это работает',nav_tiers:'Уровни',nav_assets:'Активы',nav_news:'Рынок',nav_security:'Безопасность',nav_faq:'FAQ',nav_signin:'Войти',nav_start:'Начать',hero_line1:'Более умный способ',hero_line2:'Растить цифровое богатство',hero_sub:'Black Ridge Capital предлагает структурированные крипто-инвестиции с 50% еженедельной прибылью.',hero_cta1:'Начать инвестировать',hero_cta2:'Узнать как это работает',cta_btn:'Создать бесплатный аккаунт →'},
+
+  hi:{nav_how:'कैसे काम करता है',nav_tiers:'स्तर',nav_assets:'संपत्ति',nav_news:'बाजार',nav_security:'सुरक्षा',nav_faq:'सवाल',nav_signin:'साइन इन',nav_start:'शुरू करें',hero_line1:'डिजिटल धन बढ़ाने का',hero_line2:'सबसे स्मार्ट तरीका',hero_sub:'Black Ridge Capital 50% साप्ताहिक रिटर्न के साथ क्रिप्टो निवेश प्रदान करता है।',hero_cta1:'अभी निवेश शुरू करें',hero_cta2:'कैसे काम करता है देखें',cta_btn:'मुफ्त खाता बनाएं →'}
+};
+
+let curLang='en';
+function setLang(lang){
+  curLang=lang;
+  const flags={en:'🇬🇧',fr:'🇫🇷',es:'🇪🇸',ar:'🇸🇦',zh:'🇨🇳',pt:'🇧🇷',ru:'🇷🇺',hi:'🇮🇳'};
+  document.getElementById('lang-btn').textContent=`${flags[lang]} ${lang.toUpperCase()} ▾`;
+  document.getElementById('lang-dd').classList.remove('open');
+  document.querySelectorAll('.lang-opt').forEach(o=>o.classList.remove('active'));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    const tx=(T[lang]&&T[lang][k])||(T.en[k])||null;
+    if(tx)el.innerHTML=tx;
+  });
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  renderTiers();renderCoins();renderNews();renderMkt();renderFAQ();
+}
+function toggleLang(e){e.stopPropagation();document.getElementById('lang-dd').classList.toggle('open');}
+document.addEventListener('click',()=>document.getElementById('lang-dd').classList.remove('open'));
+
+// ════════════════════════════════════════════
+// CRYPTO DATA (with real SVG logos)
+// ════════════════════════════════════════════
+const COINS=[
+  {s:'BTC',n:'Bitcoin',p:'$78,400',c:'+0.5%',up:1,pct:72,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#F7931A"/><path d="M22.4 14.1c.3-2.1-1.3-3.2-3.5-4l.7-2.8-1.7-.4-.7 2.7-.5-.1-.5-.1.7-2.7-1.7-.4-.7 2.8-1.3-.3-2.3-.6-.4 1.8s1.3.3 1.2.3c.7.2.8.6.8.9l-.8 3.4c.1 0 .1 0 .2.1h-.2l-1.2 4.7c-.1.2-.3.5-.8.4.0 0-1.2-.3-1.2-.3l-.8 2 2.2.5.5.1-.7 2.9 1.7.4.7-2.9.5.1.5.1-.7 2.9 1.7.4.7-2.9c3 .6 5.3.4 6.2-2.4.8-2.2-.04-3.5-1.6-4.3 1.1-.3 2-1 2.2-2.5zm-4 5.6c-.6 2.2-4.5 1-5.8.7l1-4.1c1.3.3 5.4 1 4.8 3.4zm.6-5.6c-.5 2-3.8 1-4.8.7l.9-3.7c1 .3 4.3.8 3.9 3z" fill="#fff"/></svg>`,
+   bg:'rgba(247,147,26,.1)',bo:'rgba(247,147,26,.25)'},
+  {s:'ETH',n:'Ethereum',p:'$2,185',c:'-0.4%',up:0,pct:55,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#627EEA"/><path d="M16 5v8.5l7.2 3.2L16 5z" fill="#fff" opacity=".6"/><path d="M16 5L8.8 16.7l7.2-3.2V5z" fill="#fff"/><path d="M16 21.8v5.2l7.2-9.9L16 21.8z" fill="#fff" opacity=".6"/><path d="M16 27v-5.2l-7.2-4.7L16 27z" fill="#fff"/><path d="M16 20.5l7.2-4.2-7.2-3.2v7.4z" fill="#fff" opacity=".2"/><path d="M8.8 16.3l7.2 4.2v-7.4l-7.2 3.2z" fill="#fff" opacity=".6"/></svg>`,
+   bg:'rgba(98,126,234,.1)',bo:'rgba(98,126,234,.25)'},
+  {s:'USDT',n:'Tether',p:'$1.00',c:'+0.0%',up:1,pct:50,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#26A17B"/><path d="M17.6 17.5v-.01c-.1.01-1 .06-2.7.06-1.4 0-2.4-.05-2.7-.06v.01c-5.4-.24-9.4-1.17-9.4-2.28s4-2.04 9.4-2.28v3.63c.3.02 1.3.08 2.7.08 1.65 0 2.47-.07 2.7-.08v-3.63c5.4.24 9.4 1.17 9.4 2.28s-4 2.04-9.4 2.28zm0-4.95v-3.25h7.5v-4.4H6.9v4.4h7.5v3.25c-6.1.28-10.7 1.49-10.7 2.95s4.6 2.67 10.7 2.95v5.45h3.2V18.5c6.1-.28 10.7-1.49 10.7-2.95s-4.6-2.67-10.7-2.95z" fill="#fff"/></svg>`,
+   bg:'rgba(38,161,123,.1)',bo:'rgba(38,161,123,.25)'},
+  {s:'BNB',n:'BNB',p:'$655',c:'+0.3%',up:1,pct:58,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#F3BA2F"/><path d="M12.1 14.5L16 10.6l3.9 3.9 2.3-2.3L16 6 9.8 12.2l2.3 2.3zM6 16l2.3-2.3L10.6 16l-2.3 2.3L6 16zm6.1 1.5L16 21.4l3.9-3.9 2.3 2.3L16 26l-6.2-6.2-.1-.1 2.4-2.2zm9.3-1.5l2.3-2.3L26 16l-2.3 2.3L21.4 16zm-5.4 0l-2.3-2.3 2.3-2.3 2.3 2.3-2.3 2.3z" fill="#fff"/></svg>`,
+   bg:'rgba(243,186,47,.1)',bo:'rgba(243,186,47,.25)'},
+  {s:'SOL',n:'Solana',p:'$86.92',c:'+0.8%',up:1,pct:40,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#9945FF"/><path d="M9.5 20.5a.7.7 0 01.5-.2h13.9c.3 0 .5.4.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.6c-.3 0-.5-.4-.3-.6l2.2-2.2zm0-11.2a.7.7 0 01.5-.2h13.9c.3 0 .5.4.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.6c-.3 0-.5-.4-.3-.6l2.2-2.2zm14.8 5.6c-.3 0-.5.4-.3.6l-2.2 2.2a.7.7 0 01-.5.2H7.4c-.3 0-.5-.4-.3-.6l2.2-2.2a.7.7 0 01.5-.2h14.5z" fill="url(#sg)"/><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00FFA3"/><stop offset="100%" stop-color="#DC1FFF"/></linearGradient></defs></svg>`,
+   bg:'rgba(153,69,255,.1)',bo:'rgba(153,69,255,.25)'},
+  {s:'XRP',n:'XRP',p:'$1.41',c:'-1.9%',up:0,pct:35,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#00AAE4"/><path d="M23 8h2.8l-6 5.9c-2.1 2-5.4 2-7.5 0L6.2 8H9l4.6 4.5c1.3 1.3 3.5 1.3 4.8 0L23 8zm-13 16H7.2l6-5.9c2.1-2 5.4-2 7.5 0l6.1 5.9H24l-4.6-4.5c-1.3-1.3-3.5-1.3-4.8 0L10 24z" fill="#fff"/></svg>`,
+   bg:'rgba(0,170,228,.1)',bo:'rgba(0,170,228,.25)'},
+  {s:'LTC',n:'Litecoin',p:'$56.34',c:'+0.6%',up:1,pct:35,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#B8B8B8"/><path d="M16 5C9.9 5 5 9.9 5 16s4.9 11 11 11 11-4.9 11-11S22.1 5 16 5zm-.5 15.5l.7-2.5-1.4.5.4-1.4 1.3-.5 1.4-5.2h2l-1.4 5.2 1.4-.5-.4 1.4-1.4.5-.7 2.5H15.5z" fill="#fff"/></svg>`,
+   bg:'rgba(184,184,184,.1)',bo:'rgba(184,184,184,.2)'},
+  {s:'DOGE',n:'Dogecoin',p:'$0.113',c:'+3.1%',up:1,pct:28,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#C3A634"/><path d="M16 6a10 10 0 100 20A10 10 0 0016 6zm1 14.5h-3v-9h3c2.8 0 5 1.9 5 4.5s-2.2 4.5-5 4.5zm0-7h-1v5h1c1.7 0 3-1.1 3-2.5s-1.3-2.5-3-2.5zm-2.5 1.5h1.5v-1H14.5v1z" fill="#fff"/></svg>`,
+   bg:'rgba(195,166,52,.1)',bo:'rgba(195,166,52,.25)'},
+  {s:'SUI',n:'Sui',p:'$3.22',c:'+2.1%',up:1,pct:48,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#4DA2FF"/><path d="M16 7c-1.6 0-2.9 1.3-2.9 2.9 0 .8.3 1.5.8 2L16 14l2.1-2.1c.5-.5.8-1.2.8-2C18.9 8.3 17.6 7 16 7zm-5 8.5c-1.6 0-2.9 1.3-2.9 2.9 0 1.6 1.3 2.9 2.9 2.9.8 0 1.5-.3 2-.8L16 18l-2.1-1.7c-.5-.5-1.2-.8-1.9-.8zm10 0c-.7 0-1.4.3-1.9.8L16 18l2.9 2.5c.5.5 1.2.8 2 .8 1.6 0 2.9-1.3 2.9-2.9s-1.3-2.9-2.8-2.9zm-5 4l-2.9 2.5c-.5.5-.8 1.2-.8 2 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9c0-.8-.3-1.5-.8-2L16 19.5z" fill="#fff"/></svg>`,
+   bg:'rgba(77,162,255,.1)',bo:'rgba(77,162,255,.25)'},
+  {s:'ADA',n:'Cardano',p:'$0.26',c:'+0.8%',up:1,pct:32,
+   svg:`<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0033AD"/><g fill="#fff" opacity=".9"><circle cx="16" cy="7" r="1.2"/><circle cx="16" cy="25" r="1.2"/><circle cx="7" cy="16" r="1.2"/><circle cx="25" cy="16" r="1.2"/><circle cx="9.5" cy="9.5" r="1"/><circle cx="22.5" cy="22.5" r="1"/><circle cx="22.5" cy="9.5" r="1"/><circle cx="9.5" cy="22.5" r="1"/><circle cx="16" cy="16" r="2.5"/><circle cx="12" cy="12.5" r=".8"/><circle cx="20" cy="12.5" r=".8"/><circle cx="12" cy="19.5" r=".8"/><circle cx="20" cy="19.5" r=".8"/></g></svg>`,
+   bg:'rgba(0,51,173,.1)',bo:'rgba(0,51,173,.2)'},
+];
+
+// ════════════════════════════════════════════
+// SUPABASE — PHASE 3, 4, 5
+// ════════════════════════════════════════════
+// ⚠️  REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE
+// Supabase dashboard → Project Settings → API
+const SUPA_URL = 'https://pniolnnykelnwmyrpsgd.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuaW9sbm55a2VsbndteXJwc2dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNTYyOTcsImV4cCI6MjA5NDYzMjI5N30.DyanLg448gv8yNDLjgDQJqazhiQiP8zLZakRK2i8zgU';
+
+// ⚠️  Resend API Key (Phase 5)
+const RESEND_KEY = 're_MtCTsuT7_DCQwT49a3pVLPd6ZW19Ngp5J';
+
+// ⚠️  Admin email & site URL
+const ADMIN_EMAIL = 'johnashx@gmail.com';
+const SITE_URL    = 'https://blackridgecapital.vercel.app';
+
+const _supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let CU  = null;  // current logged-in user profile row
+let ADM = false; // true when logged-in user is admin
+
+// Restore session on page load — wait for DOM to be ready
+async function restoreSession() {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) return;
+
+  const { data: profile } = await _supa
+    .from('users').select('*').eq('id', session.user.id).single();
+
+  if (profile) {
+    CU  = profile;
+    ADM = profile.is_admin === true || session.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    updNav();
+    // Auto-redirect based on role
+    if (ADM) {
+      goPage('admin');
+      renderAInv(); renderWals(); renderNots(); renderWdrs();
+    }
+    // Note: regular users stay on landing unless they click Dashboard
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  restoreSession();
+});
+
+// ════════════════════════════════════════════
+// STARFIELD CANVAS
+// ════════════════════════════════════════════
+(()=>{const c=document.getElementById('sc'),ctx=c.getContext('2d');let W,H,stars=[];const resize=()=>{W=c.width=window.innerWidth;H=c.height=window.innerHeight;};resize();window.addEventListener('resize',resize);class S{constructor(i){this.x=Math.random()*W;this.y=i?Math.random()*H:H+2;this.r=Math.random()*1.1+.2;this.sp=Math.random()*.22+.05;this.op=Math.random()*.5+.08;this.dx=(Math.random()-.5)*.14;}tick(){this.y-=this.sp;this.x+=this.dx;if(this.y<-2)Object.assign(this,new S(false));}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,169,75,${this.op})`;ctx.fill();}}for(let i=0;i<150;i++)stars.push(new S(true));function grid(){ctx.strokeStyle='rgba(212,169,75,.022)';ctx.lineWidth=1;const g=80;for(let x=0;x<W;x+=g){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(let y=0;y<H;y+=g){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}(function loop(){ctx.clearRect(0,0,W,H);grid();stars.forEach(s=>{s.tick();s.draw();});requestAnimationFrame(loop);})();})();
+
+// Cursor glow
+const cgEl=document.getElementById('cg');
+document.addEventListener('mousemove',e=>{cgEl.style.left=e.clientX+'px';cgEl.style.top=e.clientY+'px';});
+
+// Nav scroll
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>40));
+document.getElementById('nav').classList.add('solid');
+
+// Mobile drawer
+function toggleDrawer(){
+  const d=document.getElementById('mob-drawer');
+  const b=document.getElementById('hbg');
+  d.classList.toggle('open');
+  b.classList.toggle('open');
+  document.body.style.overflow=d.classList.contains('open')?'hidden':'';
+}
+function closeDrawer(){
+  document.getElementById('mob-drawer').classList.remove('open');
+  document.getElementById('hbg').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ════════════════════════════════════════════
+// SCROLL REVEAL
+// ════════════════════════════════════════════
+const rObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.09});
+function initRv(){document.querySelectorAll('.rv').forEach(el=>rObs.observe(el));}
+
+// ════════════════════════════════════════════
+// COUNTERS
+// ════════════════════════════════════════════
+function runCounters(){
+  let c=0;const t=setInterval(()=>{c=Math.min(c+1,24);document.getElementById('cnt1').textContent='$'+c+'M+';if(c>=24)clearInterval(t);},50);
+  let c2=0;const t2=setInterval(()=>{c2=Math.min(c2+80,3800);document.getElementById('cnt2').textContent=c2.toLocaleString()+'+';if(c2>=3800)clearInterval(t2);},16);
+}
+setTimeout(runCounters,900);
+
+// ════════════════════════════════════════════
+// TIER CARDS
+// ════════════════════════════════════════════
+const TIERS=[
+  {cls:'tc-bronze',name:'Bronze',pack:'BRONZE PACK',icon:'🥉',medal:'🥉',min:100,feats:['All 10 cryptocurrencies','Weekly 50% profit payout','24/7 live chat support','Investor dashboard access'],popular:false},
+  {cls:'tc-silver',name:'Silver',pack:'SILVER PACK',icon:'🥈',medal:'🥈',min:500,feats:['All 10 cryptocurrencies','Weekly 50% profit payout','Priority support access','Portfolio analytics'],popular:false},
+  {cls:'tc-gold',name:'Gold',pack:'GOLD PACK',icon:'🥇',medal:'🥇',min:1000,feats:['All 10 cryptocurrencies','Weekly 50% profit payout','Dedicated account manager','Advanced analytics & insights'],popular:true},
+  {cls:'tc-plat',name:'Platinum',pack:'PLATINUM PACK',icon:'💎',medal:'💎',min:5000,feats:['All 10 cryptocurrencies','Weekly 50% profit payout','VIP dedicated manager','Early feature access & perks'],popular:false},
+];
+function renderTiers(){
+  document.getElementById('tiers-wrap').innerHTML=TIERS.map((t,i)=>`
+  <div class="tc-card ${t.cls} rv d${i+1}">
+    <div class="tc-glow"></div>
+    ${t.popular?'<div class="tc-ribbon">TOP VALUE</div>':''}
+    <div class="tc-inner">
+      <div style="text-align:center;margin-bottom:.8rem;">
+        <span class="tc-medal">${t.medal}</span>
+        <div class="tc-pack" style="letter-spacing:.18em;font-size:.6rem;font-weight:700;color:var(--t3);text-transform:uppercase;">${t.pack}</div>
+        <div class="tc-name">${t.name}</div>
+      </div>
+      <div class="tc-sep"></div>
+      <div class="tc-roi-block">
+        <div class="tc-roi">50%</div>
+        <div class="tc-roi-l">Weekly Return</div>
+      </div>
+      <div class="tc-min">Minimum Investment: <strong>$${t.min.toLocaleString()}</strong></div>
+      <ul class="tc-feats">
+        ${t.feats.map(f=>`<li><span class="ck">✓</span>${f}</li>`).join('')}
+      </ul>
+      <button class="tc-btn ${t.popular?'tc-btn-f':'tc-btn-o'}" onclick="openM('m-signup')">Get Started</button>
+    </div>
+  </div>`).join('');
+  // Add gold particles
+  const goldCard=document.querySelector('.tc-gold .tc-inner');
+  if(goldCard){for(let i=0;i<8;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*90+5}%;bottom:${Math.random()*30}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*4}s;width:${2+Math.random()*3}px;height:${2+Math.random()*3}px;`;goldCard.appendChild(p);}}
+  setTimeout(initRv,50);
+}
+
+// ════════════════════════════════════════════
+// COIN GRID
+// ════════════════════════════════════════════
+function renderCoins(){
+  const grid = document.getElementById('coin-grid');
+  if (!grid) return;
+  grid.innerHTML = COINS.map((c,i) => `
+    <div class="coin" style="transition-delay:${i*.045}s;border-color:${c.bo}20;opacity:0;transform:translateY(24px);transition:opacity .6s ease ${i*.045}s,transform .6s ease ${i*.045}s,border-color .3s;"
+      onmouseover="this.style.borderColor='${c.bo}'"
+      onmouseout="this.style.borderColor='${c.bo}20'">
+      <div class="coin-logo" style="background:${c.bg};">${c.svg}</div>
+      <div class="coin-name">${c.n}</div>
+      <div class="coin-sym">${c.s}</div>
+      <div class="coin-chg" style="color:${c.up?'var(--ok)':'var(--err)'}">${c.up?'▲':'▼'} ${c.c}</div>
+      <div class="coin-price">${c.p}</div>
+    </div>`).join('');
+
+  // Use IntersectionObserver to animate in when scrolled to
+  const items = grid.querySelectorAll('.coin');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  items.forEach(el => obs.observe(el));
+}
+
+// ════════════════════════════════════════════
+// TICKER
+// ════════════════════════════════════════════
+function renderTicker(){
+  const el=document.getElementById('ticker');
+  const chunk=COINS.map(c=>`<div class="tk-item"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;overflow:hidden;">${c.svg}</span><span class="tk-sym">${c.s}</span><span class="tk-p">${c.p}</span><span class="${c.up?'tk-up':'tk-dn'}">${c.up?'▲':'▼'} ${c.c}</span></div>`).join('');
+  el.innerHTML=chunk+chunk;
+}
+
+// ════════════════════════════════════════════
+// NEWS & MARKET
+// ════════════════════════════════════════════
+const NEWS_DATA=[
+  {
+    tag:'Bitcoin',
+    title:'Bitcoin & Ethereum Prices Open Higher May 15 — BTC Holds Near $81K',
+    text:'Bitcoin opened at $81,069 on Friday, up 2.3% from Thursday. Ethereum followed at $2,282. Both assets continue consolidating as investors watch Middle East developments and awaiting US crypto legislation.',
+    img:'₿',bg:'linear-gradient(135deg,rgba(247,147,26,.14),rgba(247,147,26,.04))',
+    date:'May 15, 2026',read:'3 min read',
+    src:'Yahoo Finance',
+    url:'https://finance.yahoo.com/personal-finance/investing/article/bitcoin-and-ethereum-prices-today-friday-may-15-2026-prices-open-higher-but-slipping-this-morning-111851137.html'
+  },
+  {
+    tag:'Regulation',
+    title:'XRP Jumps Above $1.50 After CLARITY Act Clears Senate Banking Committee',
+    text:'XRP surged following the Senate Banking Committee\'s 15-9 vote advancing the Digital Asset Market Clarity Act. The bill would codify commodity classifications for BTC, ETH, SOL and XRP into federal law.',
+    img:'⚖️',bg:'linear-gradient(135deg,rgba(0,170,228,.14),rgba(0,170,228,.04))',
+    date:'May 16–17, 2026',read:'4 min read',
+    src:'CoinDesk',
+    url:'https://www.coindesk.com/markets/2026/05/15/xrp-beat-bitcoin-gains-as-clarity-act-advanced-but-a-real-bullrun-still-needs-congress'
+  },
+  {
+    tag:'Market Update',
+    title:'Crypto Markets Slip on Hot CPI Data — BTC Holds $80K as Iran War Pressures Costs',
+    text:'Consumer prices rose 3.8% in April, driven by Iran conflict energy costs. Bitcoin fell to $80,389 while Ethereum dropped 3% to $2,259. Analysts say the $80K level remains a key psychological floor.',
+    img:'📊',bg:'linear-gradient(135deg,rgba(98,126,234,.14),rgba(98,126,234,.04))',
+    date:'May 12, 2026',read:'4 min read',
+    src:'Yahoo Finance',
+    url:'https://finance.yahoo.com/personal-finance/investing/article/bitcoin-and-ethereum-prices-today-tuesday-may-12-2026-bitcoin-and-ethereum-prices-backing-off-113324298.html'
+  },
+  {
+    tag:'XRP Analysis',
+    title:'XRP ETF Inflows Hit $1.35B Cumulative — Institutional Demand Surges',
+    text:'US-listed spot XRP ETFs drew $25.8M in a single day — the largest daily haul since January. Ripple also closed a $200M debt facility and completed a tokenized Treasury pilot with JPMorgan, Mastercard and Ondo Finance.',
+    img:'💹',bg:'linear-gradient(135deg,rgba(0,170,228,.12),rgba(0,170,228,.04))',
+    date:'May 14–16, 2026',read:'5 min read',
+    src:'CoinMarketCap',
+    url:'https://coinmarketcap.com/cmc-ai/xrp/latest-updates/'
+  },
+  {
+    tag:'Bitcoin',
+    title:'Bitcoin Posts Strongest Opening Since January 31 — Hits $82,164',
+    text:'BTC opened at $82,164 on May 11, its strongest open in months, as positive Middle East peace signals lifted risk assets. Ethereum also surged to $2,369, its highest open since April 27.',
+    img:'🚀',bg:'linear-gradient(135deg,rgba(247,147,26,.12),rgba(247,147,26,.04))',
+    date:'May 11, 2026',read:'3 min read',
+    src:'Yahoo Finance',
+    url:'https://finance.yahoo.com/personal-finance/investing/article/bitcoin-and-ethereum-prices-today-monday-may-11-2026-bitcoins-strongest-opening-in-months-113216131.html'
+  },
+  {
+    tag:'ETH/BTC Ratio',
+    title:'ETH/BTC Ratio Hits 10-Month Low as Capital Rotates to Bitcoin',
+    text:'The ETH/BTC ratio has declined across weeks as institutional capital repositions within crypto toward Bitcoin. Exodus also disclosed selling 1,000 BTC (~$73M) to fund payments infrastructure development.',
+    img:'📉',bg:'linear-gradient(135deg,rgba(98,126,234,.12),rgba(98,126,234,.04))',
+    date:'May 12, 2026',read:'4 min read',
+    src:'MEXC News',
+    url:'https://www.mexc.com/news/1084539'
+  },
+];
+
+const MKT_DATA=[
+  {s:'BTC',p:'$78,400',c:'+0.5%',up:1,pct:72,col:'#F7931A'},
+  {s:'ETH',p:'$2,185',c:'-0.4%',up:0,pct:55,col:'#627EEA'},
+  {s:'SOL',p:'$86.92',c:'+0.8%',up:1,pct:40,col:'#9945FF'},
+  {s:'XRP',p:'$1.41',c:'-1.9%',up:0,pct:35,col:'#00AAE4'},
+  {s:'BNB',p:'$655',c:'+0.3%',up:1,pct:58,col:'#F3BA2F'},
+  {s:'ADA',p:'$0.26',c:'+0.8%',up:1,pct:32,col:'#0033AD'},
+];
+function renderMkt(){
+  document.getElementById('mkt-strip').innerHTML=MKT_DATA.map(m=>`
+    <div class="mkt-card rv">
+      <div class="mkt-sym">${m.s}</div>
+      <div class="mkt-price">${m.p}</div>
+      <div class="mkt-chg" style="color:${m.up?'var(--ok)':'var(--err)'}">${m.up?'▲':'▼'} ${m.c}</div>
+      <div class="mkt-bar"><div class="mkt-prog" style="width:${m.pct}%;background:${m.col};"></div></div>
+    </div>`).join('');
+}
+function renderNews(){
+  document.getElementById('news-grid').innerHTML=NEWS_DATA.map((n,i)=>`
+    <a class="news-card rv d${(i%3)+1}" href="${n.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;">
+      <div class="news-img" style="background:${n.bg};font-size:2.4rem;">${n.img}</div>
+      <div class="news-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.55rem;">
+          <div class="news-tag">${n.tag}</div>
+          <div style="font-size:.62rem;color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:4px;padding:.15rem .5rem;">${n.src}</div>
+        </div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-text">${n.text}</div>
+        <div class="news-meta">
+          <span>${n.date}</span><div class="news-dot"></div><span>${n.read}</span>
+          <div style="margin-left:auto;font-size:.68rem;color:var(--g1);display:flex;align-items:center;gap:.25rem;">Read →</div>
+        </div>
+      </div>
+    </a>`).join('');
+}
+
+// ════════════════════════════════════════════
+// FAQ
+// ════════════════════════════════════════════
+const FAQS=[
+  {q:'Is Black Ridge Capital safe and secure?',a:'Absolutely. We use 256-bit AES encryption, cold wallet storage for the majority of funds, and 24/7 real-time transaction monitoring. We have maintained a 100% secure track record since inception. Your investment security is our top priority.'},
+  {q:'How are my 50% weekly returns paid?',a:'Returns are paid weekly in the same cryptocurrency you invested with, sent directly to your personal wallet address. Your 50% return on the invested amount arrives every 7 days after your investment is confirmed.'},
+  {q:'How long does investment confirmation take?',a:'Once you send your cryptocurrency and submit confirmation on the platform with your transaction hash, our compliance team verifies it on the blockchain within 24 hours. You\'ll see the status update in your dashboard immediately.'},
+  {q:'Can I invest in multiple tiers simultaneously?',a:'Yes! You can hold multiple active investments across different tiers and different cryptocurrencies at the same time. Each investment earns its own independent 50% weekly return.'},
+  {q:'What are the Terms & Conditions I need to agree to?',a:'Our Terms & Conditions cover investment risk disclosure, eligibility requirements (18+), account responsibility, the investment and returns process, withdrawal procedures, and our privacy policy. You can read the full T&C during signup or anytime via the footer.'},
+  {q:'What if I encounter a problem?',a:'Our live chat support is US-based and available 24/7 via the chat icon on the website. A real team member from our United States support center (not a bot) will assist you promptly — from account access to investment queries.'},
+  {q:'Is there a maximum investment amount?',a:'There is no upper cap. The more you invest within a tier, the more you earn each week. Many of our Platinum investors scale their portfolios significantly over time with compounding returns.'},
+];
+function renderFAQ(){
+  const el=document.getElementById('faq-body');if(!el)return;
+  el.innerHTML=FAQS.map((f,i)=>`<div class="faq-i rv" id="fq${i}"><div class="faq-q" onclick="toggleFAQ(${i})"><h4>${f.q}</h4><div class="faq-tog">+</div></div><div class="faq-a">${f.a}</div></div>`).join('');
+}
+function toggleFAQ(i){document.getElementById('fq'+i).classList.toggle('op');}
+
+// ════════════════════════════════════════════
+// PAGES
+// ════════════════════════════════════════════
+function goPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(name+'-page').classList.add('on');
+  window.scrollTo(0,0);
+  document.getElementById('nav-pub').style.display=name==='landing'?'':'none';
+  if(name==='landing')setTimeout(initRv,80);
+}
+
+// ════════════════════════════════════════════
+// MODALS
+// ════════════════════════════════════════════
+function openM(id){document.getElementById(id).classList.add('on');}
+function closeM(id){document.getElementById(id).classList.remove('on');}
+function swM(a,b){closeM(a);openM(b);}
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+
+// ════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════
+function gv(id){return(document.getElementById(id)||{}).value?.trim()||'';}
+function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
+function hideEl(id){document.getElementById(id).style.display='none';}
+function fmtAmt(n){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDate(d){return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});}
+
+// ════════════════════════════════════════════
+// PHASE 3 — AUTH (Supabase)
+// ════════════════════════════════════════════
+
+// SIGN UP
+async function doSignup() {
+  const fn = gv('s-fn'), ln = gv('s-ln');
+  const em = gv('s-em').toLowerCase();
+  const ph = gv('s-ph'), pw = gv('s-pw');
+  hideEl('se'); hideEl('ss');
+  if (!fn || !ln || !em || !pw) { showErr('se','Please fill in all required fields.'); return; }
+  if (pw.length < 6) { showErr('se','Password must be at least 6 characters.'); return; }
+  if (!document.getElementById('tc-chk').checked) { showErr('se','Please agree to the Terms & Conditions.'); return; }
+
+  const btn = document.querySelector('#m-signup .btn-gold');
+  btn.textContent = 'Creating account…'; btn.disabled = true;
+
+  // 1. Create auth user in Supabase
+  const { data, error } = await _supa.auth.signUp({
+    email: em, password: pw,
+    options: { data: { first_name: fn, last_name: ln, phone: ph } }
+  });
+
+  if (error) {
+    // Friendly messages for common errors
+    if (error.message.toLowerCase().includes('already registered')) {
+      showErr('se', 'This email is already registered. Please sign in instead.');
+    } else {
+      showErr('se', error.message);
+    }
+    btn.textContent = 'Create Account'; btn.disabled = false;
+    return;
+  }
+
+  // 2. Insert profile row — include ALL NOT NULL columns explicitly
+  if (data.user) {
+    const { error: uErr } = await _supa.from('users').upsert({
+      id:          data.user.id,
+      first_name:  fn   || '',
+      last_name:   ln   || '',
+      email:       em   || '',
+      phone:       ph   || '',
+      is_admin:    false,
+      is_verified: false,
+      joined_at:   new Date().toISOString(),
+      updated_at:  new Date().toISOString()
+    }, { onConflict: 'id' });
+
+    // If upsert fails (e.g. RLS), store in auth metadata only and proceed
+    // Profile row will be created on first login instead
+    if (uErr) console.warn('Profile row error (non-fatal):', uErr.message);
+  }
+
+  btn.textContent = 'Create Account'; btn.disabled = false;
+  const ss = document.getElementById('ss');
+
+  // Detect whether email confirmation is required
+  // If session is returned immediately — confirm email is OFF — log them in directly
+  if (data.session) {
+    ss.textContent = '✓ Account created! Logging you in…';
+    ss.style.display = 'block';
+    setTimeout(() => {
+      closeM('m-signup');
+      CU = data.user;
+      // Fetch full profile then go to dashboard
+      _supa.from('users').select('*').eq('id', data.user.id).single()
+        .then(({ data: p }) => { if (p) CU = p; updNav(); showDash(); });
+    }, 1200);
+  } else {
+    // Email confirmation is ON — tell them to check their inbox
+    ss.innerHTML = '✓ Account created! <strong>Check your email inbox</strong> and click the confirmation link before signing in.';
+    ss.style.display = 'block';
+  }
+}
+
+// WITHDRAWAL
+async function submitWithdrawal() {
+  const amt   = document.getElementById('w-amt').value.trim();
+  const coin  = document.getElementById('w-coin').value;
+  const addr  = document.getElementById('w-addr').value.trim();
+  const note  = document.getElementById('w-note').value.trim();
+  const errEl = document.getElementById('we');
+  const sucEl = document.getElementById('ws');
+  errEl.style.display = 'none'; sucEl.style.display = 'none';
+
+  if (!amt || isNaN(amt) || Number(amt) <= 0) { showErr('we', 'Please enter a valid amount.'); return; }
+  if (!coin)  { showErr('we', 'Please select a crypto to receive.'); return; }
+  if (!addr)  { showErr('we', 'Please enter your wallet address.'); return; }
+
+  const btn = document.querySelector('#m-withdraw .btn-gold');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  // Get fresh session token
+  const { data: { session: wdSess } } = await _supa.auth.getSession();
+  if (!wdSess) {
+    showErr('we', 'Session expired. Please sign in again.'); return;
+  }
+
+  const wdPayload = {
+    user_id        : CU.id,
+    user_name      : (CU.first_name || CU.fn || '') + ' ' + (CU.last_name || CU.ln || ''),
+    user_email     : CU.email,
+    amount         : Number(amt),
+    crypto         : coin,
+    wallet_address : addr,
+    notes          : note || null,
+    status         : 'Pending'
+  };
+
+  // Direct REST with user JWT
+  const wdRes = await fetch(SUPA_URL + '/rest/v1/withdrawals', {
+    method : 'POST',
+    headers: {
+      'Content-Type'  : 'application/json',
+      'apikey'        : SUPA_KEY,
+      'Authorization' : 'Bearer ' + wdSess.access_token,
+      'Prefer'        : 'return=representation'
+    },
+    body: JSON.stringify(wdPayload)
+  });
+
+  btn.textContent = 'Submit Withdrawal Request'; btn.disabled = false;
+
+  if (!wdRes.ok) {
+    const wdErr = await wdRes.json();
+    showErr('we', 'Submission failed: ' + (wdErr.message || wdErr.error || JSON.stringify(wdErr))); return;
+  }
+
+  sucEl.textContent = '✓ Withdrawal request submitted! Our team will process it within 24–48 hours.';
+  sucEl.style.display = 'block';
+  document.getElementById('w-amt').value  = '';
+  document.getElementById('w-coin').value = '';
+  document.getElementById('w-addr').value = '';
+  document.getElementById('w-note').value = '';
+  setTimeout(() => closeM('m-withdraw'), 3000);
+}
+
+// FORGOT PASSWORD
+async function doForgot() {
+  const em = gv('f-email').toLowerCase();
+  hideEl('fe'); hideEl('fs');
+  if (!em) { showErr('fe', 'Please enter your email address.'); return; }
+
+  const btn = document.querySelector('#m-forgot .btn-gold');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+
+  const { error } = await _supa.auth.resetPasswordForEmail(em, {
+    redirectTo: SITE_URL + '?reset=1'
+  });
+
+  btn.textContent = 'Send Reset Link'; btn.disabled = false;
+
+  if (error) {
+    showErr('fe', error.message);
+  } else {
+    const s = document.getElementById('fs');
+    s.textContent = '✓ Reset link sent! Check your email inbox and click the link to set a new password.';
+    s.style.display = 'block';
+    document.getElementById('f-email').value = '';
+  }
+}
+
+// LOG IN
+async function doLogin() {
+  const em = gv('l-email').toLowerCase(), pw = gv('l-pass');
+  hideEl('le');
+  if (!em || !pw) { showErr('le', 'Please enter your email and password.'); return; }
+  const btn = document.querySelector('#m-login .btn-gold');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+
+  // Step 1 — Supabase Auth sign in
+  const { data, error } = await _supa.auth.signInWithPassword({ email: em, password: pw });
+  if (error) {
+    if (error.message.toLowerCase().includes('email not confirmed') ||
+        error.message.toLowerCase().includes('not confirmed')) {
+      showErr('le', 'Please confirm your email first. Check your inbox for a confirmation link from Black Ridge Capital.');
+    } else if (error.message.toLowerCase().includes('invalid login') ||
+               error.message.toLowerCase().includes('invalid credentials')) {
+      showErr('le', 'Incorrect email or password. Please try again.');
+    } else {
+      showErr('le', error.message);
+    }
+    btn.textContent = 'Sign In'; btn.disabled = false;
+    return;
+  }
+
+  // Step 2 — Auth succeeded. Set session so subsequent queries run as this user
+  // (Supabase JS v2 sets the session automatically — but we add a small wait to ensure it propagates)
+  await new Promise(r => setTimeout(r, 300));
+
+  // Step 3 — Fetch profile row
+  const { data: profile, error: pErr } = await _supa
+    .from('users').select('*').eq('id', data.user.id).single();
+
+  // Step 4 — If row exists, we're done
+  if (profile && !pErr) {
+    CU  = profile;
+    // Also treat the hardcoded admin email as admin even if DB flag not yet set
+    ADM = profile.is_admin === true || data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    // If ADM by email but flag not in DB, patch it silently
+    if (ADM && !profile.is_admin) {
+      _supa.from('users').update({ is_admin: true }).eq('id', profile.id).then(() => {});
+    }
+    btn.textContent = 'Sign In'; btn.disabled = false;
+    closeM('m-login'); updNav();
+    ADM ? showAdmin() : showDash();
+    return;
+  }
+
+  // Step 5 — Row missing: build a local profile from auth metadata and proceed
+  // This handles users who signed up before the SQL trigger was in place.
+  // The row will be created in the background via the SQL fix below.
+  const meta = data.user.user_metadata || {};
+  const fallbackProfile = {
+    id:          data.user.id,
+    first_name:  meta.first_name || data.user.email.split('@')[0],
+    last_name:   meta.last_name  || '',
+    email:       data.user.email || '',
+    phone:       meta.phone      || '',
+    is_admin:    false,
+    is_verified: false,
+    joined_at:   data.user.created_at || new Date().toISOString(),
+    updated_at:  new Date().toISOString()
+  };
+
+  // Try to insert the row silently — don't block login if it fails
+  _supa.from('users').upsert(fallbackProfile, { onConflict: 'id' }).then(() => {});
+
+  CU  = fallbackProfile;
+  ADM = data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  btn.textContent = 'Sign In'; btn.disabled = false;
+  closeM('m-login'); updNav();
+  ADM ? showAdmin() : showDash();
+}
+
+// ADMIN LOGIN
+
+
+// LOG OUT
+async function doLogout() {
+  await _supa.auth.signOut();
+  CU = null; ADM = false;
+  updNav(); goPage('landing');
+  document.getElementById('nav-pub').style.display = '';
+}
+
+function updNav() {
+  const auth  = document.getElementById('nav-auth');
+  const user  = document.getElementById('nav-user');
+  const dbBtn = document.getElementById('dash-btn');
+  // Remove any previous onclick to avoid stale handlers
+  const newBtn = dbBtn.cloneNode(true);
+  dbBtn.parentNode.replaceChild(newBtn, dbBtn);
+  if (CU) {
+    auth.style.display  = 'none';
+    user.style.display  = 'flex';
+    if (ADM) {
+      newBtn.textContent = 'Admin Panel';
+      newBtn.addEventListener('click', () => showAdmin());
+    } else {
+      newBtn.textContent = 'Dashboard';
+      newBtn.addEventListener('click', () => showDash());
+    }
+  } else {
+    auth.style.display = '';
+    user.style.display = 'none';
+    newBtn.textContent = 'Dashboard';
+    newBtn.addEventListener('click', () => showDash());
+  }
+}
+
+function showDash() {
+  if (!CU) { openM('m-login'); return; }
+  goPage('dashboard');
+  renderDash();
+}
+
+function showAdmin() {
+  goPage('admin');
+  renderAInv();
+  renderWals();
+  renderNots();
+}
+
+// ════════════════════════════════════════════
+// PHASE 4 — DASHBOARD (Supabase reads)
+// ════════════════════════════════════════════
+
+async function renderDash() {
+  document.getElementById('du-name').textContent = CU.first_name || CU.fn || 'Investor';
+  document.getElementById('d-since').textContent  = fmtDate(CU.joined_at || CU.joined || new Date());
+
+  const { data: invs, error } = await _supa
+    .from('investments').select('*')
+    .eq('user_id', CU.id)
+    .order('created_at', { ascending: false });
+
+  if (error) { console.error('Dashboard load error:', error); return; }
+
+  const confirmed = (invs || []).filter(i => i.status === 'Confirmed');
+  const total     = confirmed.reduce((s, i) => s + Number(i.amount), 0);
+
+  document.getElementById('d-total').textContent  = '$' + fmtAmt(total);
+  document.getElementById('d-active').textContent  = confirmed.length;
+  document.getElementById('d-ret').textContent     = '$' + fmtAmt(total * 0.5);
+
+  const tb = document.getElementById('d-tbody');
+  if (!invs || !invs.length) {
+    tb.innerHTML = '<tr><td colspan="6" class="emp">No investments yet. Click "+ New Investment" to begin.</td></tr>';
+    return;
+  }
+  tb.innerHTML = invs.map(i => `
+    <tr>
+      <td>${fmtDate(i.created_at)}</td>
+      <td>${i.tier}</td>
+      <td>${i.crypto}</td>
+      <td>$${fmtAmt(i.amount)}</td>
+      <td style="color:var(--ok);font-weight:600;">$${fmtAmt(i.amount * 0.5)} / wk</td>
+      <td><span class="sb sb-${i.status.toLowerCase().slice(0,1)}">${i.status}</span></td>
+    </tr>`).join('');
+}
+
+// ════════════════════════════════════════════
+// PHASE 4 — ADMIN PANEL (Supabase reads/writes)
+// ════════════════════════════════════════════
+
+function swTab(el,id) {
+  document.querySelectorAll('.atab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.ac').forEach(c  => c.classList.remove('on'));
+  el.classList.add('on'); document.getElementById(id).classList.add('on');
+}
+
+async function renderWdrs() {
+  const { data: wdrs, error } = await _supa
+    .from('withdrawals').select('*').order('created_at', { ascending: false });
+  const tbody = document.getElementById('wdr-tbody');
+  if (error || !wdrs || !wdrs.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr>';
+    document.getElementById('wdr-c').textContent = '';
+    return;
+  }
+  const pending = wdrs.filter(w => w.status === 'Pending').length;
+  document.getElementById('wdr-c').textContent = pending || '';
+  tbody.innerHTML = wdrs.map(w => `
+    <tr>
+      <td>${fmtDate(w.created_at)}</td>
+      <td>${w.user_name || '—'}</td>
+      <td>${w.user_email || '—'}</td>
+      <td>$${fmtAmt(w.amount)}</td>
+      <td>${w.crypto}</td>
+      <td style="font-size:.68rem;max-width:140px;word-break:break-all;">${w.wallet_address}</td>
+      <td style="font-size:.75rem;max-width:120px;">${w.notes || '—'}</td>
+      <td><span class="sbadge sb-\${(w.status||'').toLowerCase()}">${w.status}</span></td>
+      <td>${w.status === 'Pending' ? `<button class="abt abt-ok" onclick="updWdr('\${w.id}','Approved')">Approve</button> <button class="abt abt-rej" onclick="updWdr('\${w.id}','Rejected')">Reject</button>` : '—'}</td>
+    </tr>`).join('');
+}
+async function updWdr(id, status) {
+  const { error } = await _supa.from('withdrawals').update({ status }).eq('id', id);
+  if (error) { alert('Update failed: ' + error.message); return; }
+  renderWdrs();
+}
+
+async function renderAInv() {
+  const { data: all, error } = await _supa
+    .from('investments').select('*').order('created_at', { ascending: false });
+  if (error) { console.error('Admin inv error:', error); return; }
+
+  document.getElementById('pend-c').textContent = (all || []).filter(i => i.status === 'Pending').length;
+  const tb = document.getElementById('a-tbody');
+  if (!all || !all.length) {
+    tb.innerHTML = '<tr><td colspan="9" class="emp">No investments yet.</td></tr>'; return;
+  }
+  tb.innerHTML = all.map(i => `
+    <tr>
+      <td>${fmtDate(i.created_at)}</td>
+      <td>${i.user_name}</td>
+      <td style="font-size:.7rem;color:var(--t2)">${i.user_email}</td>
+      <td>${i.tier}</td>
+      <td>${i.crypto}</td>
+      <td>$${fmtAmt(i.amount)}</td>
+      <td style="font-size:.68rem;color:var(--t3);max-width:80px;overflow:hidden;text-overflow:ellipsis;"
+          title="${i.tx_hash||''}">${i.tx_hash || '—'}</td>
+      <td><span class="sb sb-${i.status.toLowerCase().slice(0,1)}">${i.status}</span></td>
+      <td>${i.status === 'Pending'
+        ? `<button class="cbtn" onclick="updSt('${i.id}','Confirmed')">Confirm</button>
+           <button class="rbtn" onclick="updSt('${i.id}','Rejected')">Reject</button>`
+        : '<span style="font-size:.7rem;color:var(--t3)">Done</span>'}</td>
+    </tr>`).join('');
+}
+
+async function updSt(id, status) {
+  // Update investment status
+  const { data: inv, error } = await _supa
+    .from('investments').update({ status }).eq('id', id).select().single();
+  if (error) {
+    alert('Update failed: ' + error.message + '\n\nThis is likely a Supabase RLS policy issue. Make sure you have a policy that allows admin users to update the investments table.');
+    return;
+  }
+
+  // Insert notification (DB trigger also does this, but we refresh UI here)
+  renderAInv(); renderNots();
+
+  // PHASE 5 — Send email via Resend
+  if (RESEND_KEY && RESEND_KEY !== 'PASTE_YOUR_RESEND_API_KEY_HERE') {
+    await sendAdminEmail(
+      `Investment ${status} — ${inv.user_name}`,
+      `
+        <h2 style="color:#D4A94B">Investment ${status}</h2>
+        <p><strong>Investor:</strong> ${inv.user_name} (${inv.user_email})</p>
+        <p><strong>Tier:</strong> ${invData.tier}</p>
+        <p><strong>Crypto:</strong> ${invData.crypto}</p>
+        <p><strong>Amount:</strong> $${fmtAmt(invData.amount)}</p>
+        <p><strong>Weekly Return:</strong> $${fmtAmt(inv.amount * 0.5)}</p>
+        <p><strong>TX Hash:</strong> ${invData.tx_hash}</p>
+        <p><strong>Status changed to:</strong> <strong style="color:${status==='Confirmed'?'#00E5A0':'#FF4560'}">${status}</strong></p>
+      `
+    );
+  }
+}
+
+const WFIX_SQL = `-- Run in Supabase > SQL Editor > New Query
+
+-- 1. Seed all wallet rows
+INSERT INTO wallets (coin, coin_name, network, address, updated_at) VALUES
+  ('BTC','Bitcoin','Bitcoin Network','',now()),
+  ('ETH','Ethereum','ERC-20','',now()),
+  ('USDT','Tether','TRC-20 or ERC-20','',now()),
+  ('BNB','BNB','BEP-20','',now()),
+  ('SOL','Solana','Solana Network','',now()),
+  ('XRP','XRP','XRP Ledger','',now()),
+  ('LTC','Litecoin','Litecoin Network','',now()),
+  ('DOGE','Dogecoin','Dogecoin Network','',now()),
+  ('SUI','Sui','Sui Network','',now()),
+  ('ADA','Cardano','Cardano Network','',now())
+ON CONFLICT (coin) DO NOTHING;
+
+-- 2. Drop ALL existing wallet policies
+DO $$
+DECLARE r RECORD;
+BEGIN
+  FOR r IN SELECT policyname FROM pg_policies WHERE tablename = 'wallets' LOOP
+    EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON wallets';
+  END LOOP;
+END $$;
+
+-- 3. Enable RLS
+ALTER TABLE wallets ENABLE ROW LEVEL SECURITY;
+
+-- 4. Anyone can read (needed for invest flow)
+CREATE POLICY "wallets_select_all"
+  ON wallets FOR SELECT USING (true);
+
+-- 5. Admin write via JWT email (avoids users table RLS deadlock)
+CREATE POLICY "wallets_insert_admin"
+  ON wallets FOR INSERT
+  WITH CHECK (auth.jwt() ->> 'email' = 'johnashx@gmail.com');
+
+CREATE POLICY "wallets_update_admin"
+  ON wallets FOR UPDATE
+  USING  (auth.jwt() ->> 'email' = 'johnashx@gmail.com')
+  WITH CHECK (auth.jwt() ->> 'email' = 'johnashx@gmail.com');`;
+
+function wfixLog(msg, color) {
+  const el = document.getElementById('wfix-log');
+  if (!el) return;
+  document.getElementById('wfix-diag').style.display = '';
+  const d = document.createElement('div');
+  d.style.color = color || 'var(--t2)';
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+function wfixShowSQL() {
+  document.getElementById('wfix-sql').textContent = WFIX_SQL;
+  document.getElementById('wfix-sql-wrap').style.display = '';
+}
+
+async function wfixCopySQL() {
+  try {
+    await navigator.clipboard.writeText(WFIX_SQL);
+    const b = document.getElementById('wfix-copy-btn');
+    b.textContent = 'Copied!';
+    setTimeout(() => { b.textContent = 'Copy SQL'; }, 2500);
+  } catch(_) {}
+}
+
+async function renderWals() {
+  const NETWORKS = {BTC:'Bitcoin Network',ETH:'ERC-20',USDT:'TRC-20 or ERC-20',BNB:'BEP-20',SOL:'Solana Network',XRP:'XRP Ledger',LTC:'Litecoin Network',DOGE:'Dogecoin Network',SUI:'Sui Network',ADA:'Cardano Network'};
+  const el = document.getElementById('wal-mgr');
+
+  // Clear diagnostic panels
+  const diagEl = document.getElementById('wfix-log');
+  if (diagEl) diagEl.innerHTML = '';
+  document.getElementById('wfix-diag').style.display = 'none';
+  document.getElementById('wfix-sql-wrap').style.display = 'none';
+
+  el.innerHTML = COINS.map(c => `
+    <div class="wrow">
+      <div class="wcl">
+        <div style="width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;">${c.svg}</div>
+        <div>
+          <div>${c.s}</div>
+          <div style="font-size:.6rem;color:var(--t3);">${NETWORKS[c.s]||''}</div>
+        </div>
+      </div>
+      <input class="wi" id="wi-${c.s}" value="" placeholder="Enter ${c.n} wallet address"/>
+      <button class="wsv" onclick="saveWal('${c.s}',this)">Save</button>
+    </div>`).join('');
+
+  const { data: wals, error } = await _supa.from('wallets').select('*');
+  if (!error && wals && wals.length) {
+    wals.forEach(w => {
+      const inp = document.getElementById('wi-' + w.coin);
+      if (inp && w.address) inp.value = w.address;
+    });
+  }
+}
+
+async function saveWal(sym, btn) {
+  const address = document.getElementById('wi-' + sym).value.trim();
+  if (!address) { alert('Please enter a wallet address.'); return; }
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  const COIN_NAMES = {BTC:'Bitcoin',ETH:'Ethereum',USDT:'Tether',BNB:'BNB',SOL:'Solana',XRP:'XRP',LTC:'Litecoin',DOGE:'Dogecoin',SUI:'Sui',ADA:'Cardano'};
+  const NETWORKS   = {BTC:'Bitcoin Network',ETH:'ERC-20',USDT:'TRC-20 or ERC-20',BNB:'BEP-20',SOL:'Solana Network',XRP:'XRP Ledger',LTC:'Litecoin Network',DOGE:'Dogecoin Network',SUI:'Sui Network',ADA:'Cardano Network'};
+
+  // Clear old diagnostics
+  const diagEl = document.getElementById('wfix-log');
+  if (diagEl) diagEl.innerHTML = '';
+  document.getElementById('wfix-diag').style.display = 'none';
+  document.getElementById('wfix-sql-wrap').style.display = 'none';
+
+  // 1. Check session
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) {
+    wfixLog('No active session detected.', 'var(--err)');
+    wfixLog('You appear to be logged out. Please log out and sign in again as admin.', '#F0CC76');
+    btn.textContent = 'Save'; btn.disabled = false;
+    return;
+  }
+  wfixLog('Session: ' + session.user.email, 'var(--ok)');
+
+  // 2. Check row exists
+  const { data: existing } = await _supa.from('wallets').select('coin').eq('coin', sym).maybeSingle();
+
+  let saveError = null;
+  const now = new Date().toISOString();
+
+  if (existing) {
+    wfixLog('Row exists — attempting UPDATE…', 'var(--t3)');
+    const { error } = await _supa.from('wallets').update({ address, updated_at: now }).eq('coin', sym);
+    saveError = error;
+  } else {
+    wfixLog('No row found — attempting INSERT…', 'var(--t3)');
+    const { error } = await _supa.from('wallets').insert({
+      coin: sym,
+      coin_name: COIN_NAMES[sym] || sym,
+      network: NETWORKS[sym] || sym + ' Network',
+      address,
+      updated_at: now
+    });
+    saveError = error;
+  }
+
+  if (!saveError) {
+    btn.textContent = 'Saved ✓'; btn.style.background = 'var(--ok)'; btn.disabled = false;
+    setTimeout(() => { btn.textContent = 'Save'; btn.style.background = ''; }, 2200);
+    return;
+  }
+
+  // Save failed — show diagnostic + SQL
+  wfixLog('FAILED: ' + saveError.message + ' (code: ' + (saveError.code||'?') + ')', 'var(--err)');
+  wfixLog('This is an RLS (Row Level Security) permission error in Supabase.', '#F0CC76');
+  wfixLog('Fix: copy the SQL below and run it in Supabase > SQL Editor > New Query', '#F0CC76');
+  wfixShowSQL();
+  btn.textContent = 'Save'; btn.disabled = false;
+}
+
+async function renderNots() {
+  const { data: n, error } = await _supa
+    .from('notifications').select('*').order('created_at', { ascending: false }).limit(50);
+  if (error) { console.error('Notif load error:', error); return; }
+  document.getElementById('notif-c').textContent = (n || []).filter(x => !x.is_read).length;
+  const el = document.getElementById('notif-body');
+  if (!n || !n.length) { el.innerHTML = '<div class="emp">No notifications yet.</div>'; return; }
+  el.innerHTML = n.map(x => `
+    <div class="ni" onclick="markNot('${x.id}')">
+      <div class="nd ${x.is_read ? 'r' : ''}"></div>
+      <div>
+        <div class="nt">${x.title}</div>
+        <div class="nm">${x.message} &nbsp;·&nbsp; ${fmtDate(x.created_at)}</div>
+      </div>
+    </div>`).join('');
+}
+
+async function markNot(id) {
+  await _supa.from('notifications').update({ is_read: true }).eq('id', id);
+  renderNots();
+}
+
+// ════════════════════════════════════════════
+// PHASE 4 — INVEST FLOW (Supabase write)
+// ════════════════════════════════════════════
+
+let IS = { tier: null, min: 0, coin: null, svg: '', amt: 0 };
+
+function openInvest() {
+  if (!CU) { openM('m-login'); return; }
+  IS = { tier: null, min: 0, coin: null, svg: '', amt: 0 };
+  document.querySelectorAll('.tio').forEach(o => o.classList.remove('sel'));
+  document.getElementById('inv-amt').value = '';
+  document.getElementById('inv-tx').value  = '';
+  goIS(1); openM('m-invest');
+}
+function goIS(n) {
+  document.querySelectorAll('.istep').forEach(s => s.classList.remove('on'));
+  document.getElementById('is' + n).classList.add('on');
+  const l = ['','Step 1 of 3 — Choose Your Tier','Step 2 of 3 — Choose Cryptocurrency','Step 3 of 3 — Send Payment',''];
+  document.getElementById('inv-lbl').textContent = l[n] || '';
+}
+function pickTier(name, min, el) {
+  IS.tier = name; IS.min = min;
+  document.querySelectorAll('.tio').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('inv-amt').placeholder = `Min $${min.toLocaleString()}`;
+}
+function iNext1() {
+  if (!IS.tier) { alert('Please select a tier.'); return; }
+  const a = parseFloat(document.getElementById('inv-amt').value);
+  if (!a || a < IS.min) { alert(`Minimum for ${IS.tier} is $${IS.min.toLocaleString()}`); return; }
+  IS.amt = a;
+  // Use data-index to reference COINS array — never pass SVG through onclick
+  document.getElementById('co-opts').innerHTML = COINS.map((c, i) =>
+    `<div class="coo" data-idx="${i}" data-sym="${c.s}" onclick="pickCoin(${i},this)">
+       <div class="coo-i">${c.svg}</div>
+       <div class="coo-s">${c.s}</div>
+     </div>`
+  ).join('');
+  goIS(2);
+}
+function pickCoin(idx, el) {
+  const c = COINS[idx];
+  IS.coin = c.s; IS.svg = c.svg;
+  document.querySelectorAll('.coo').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// Step 2 → 3: load wallet address from Supabase
+async function iNext2() {
+  if (!IS.coin) { alert('Please select a cryptocurrency.'); return; }
+  const { data: w, error } = await _supa
+    .from('wallets').select('address,network').eq('coin', IS.coin).single();
+  const addr = (w && w.address) ? w.address : '';
+  document.getElementById('pay-sym').textContent  = IS.coin;
+  document.getElementById('pay-addr').textContent = addr || 'Wallet not configured yet — contact support via live chat.';
+  document.getElementById('inv-sum').innerHTML = `
+    <div class="isr"><span>Tier</span><span>${IS.tier}</span></div>
+    <div class="isr"><span>Cryptocurrency</span><span>${IS.coin}</span></div>
+    <div class="isr"><span>Network</span><span>${(w && w.network) ? w.network : IS.coin + ' Network'}</span></div>
+    <div class="isr"><span>Amount (USD)</span><span>$${fmtAmt(IS.amt)}</span></div>
+    <div class="isr"><span>Expected Weekly Return (50%)</span><span style="color:var(--ok)">$${fmtAmt(IS.amt * 0.5)}</span></div>`;
+  goIS(3);
+}
+
+function cpWallet() {
+  const addr = document.getElementById('pay-addr').textContent;
+  navigator.clipboard.writeText(addr).then(() => {
+    const b = event.target; b.textContent = '✓ Copied!';
+    setTimeout(() => { b.textContent = '📋 Copy Address'; }, 2000);
+  });
+}
+
+async function submitInv() {
+  const tx  = document.getElementById('inv-tx').value.trim();
+  const btn = document.querySelector('#m-invest #is3 .btn-gold');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  // Get fresh session token to authenticate the insert
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) {
+    alert('Session expired. Please sign in again.');
+    btn.textContent = 'Confirm Investment ✓'; btn.disabled = false;
+    return;
+  }
+
+  const payload = {
+    user_id    : CU.id,
+    user_name  : (CU.first_name || CU.fn || '') + ' ' + (CU.last_name || CU.ln || ''),
+    user_email : CU.email,
+    tier       : IS.tier,
+    crypto     : IS.coin,
+    amount     : IS.amt,
+    tx_hash    : tx || 'Not provided',
+    status     : 'Pending'
+  };
+
+  // Use direct REST API with user's JWT — bypasses anon key RLS issues
+  const res = await fetch(SUPA_URL + '/rest/v1/investments', {
+    method : 'POST',
+    headers: {
+      'Content-Type'  : 'application/json',
+      'apikey'        : SUPA_KEY,
+      'Authorization' : 'Bearer ' + session.access_token,
+      'Prefer'        : 'return=representation'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const inv = await res.json();
+  if (!res.ok) {
+    alert('Submission failed: ' + (inv.message || inv.error || JSON.stringify(inv)));
+    btn.textContent = 'Confirm Investment ✓'; btn.disabled = false;
+    return;
+  }
+
+  const invData = Array.isArray(inv) ? inv[0] : inv;
+
+  // PHASE 5 — Email admin about new investment
+  if (RESEND_KEY && RESEND_KEY !== 'PASTE_YOUR_RESEND_API_KEY_HERE') {
+    await sendAdminEmail(
+      `🔔 New Investment — ${invData.user_name}`,
+      `
+        <h2 style="color:#D4A94B">New Investment Submitted</h2>
+        <p><strong>Investor:</strong> ${invData.user_name}</p>
+        <p><strong>Email:</strong> ${invData.user_email}</p>
+        <p><strong>Tier:</strong> ${invData.tier}</p>
+        <p><strong>Crypto:</strong> ${invData.crypto}</p>
+        <p><strong>Amount:</strong> $${fmtAmt(invData.amount)}</p>
+        <p><strong>Expected Weekly Return:</strong> $${fmtAmt(invData.amount * 0.5)}</p>
+        <p><strong>TX Hash:</strong> ${invData.tx_hash}</p>
+        <p><strong>Date:</strong> ${fmtDate(invData.created_at)}</p>
+        <p style="margin-top:16px">
+          <a href="https://YOUR_SITE_URL" style="background:#D4A94B;color:#000;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
+            Go to Admin Panel →
+          </a>
+        </p>
+      `
+    );
+  }
+
+  btn.textContent = 'Confirm Investment ✓'; btn.disabled = false;
+  goIS(4);
+}
+
+// ════════════════════════════════════════════
+// PHASE 5 — EMAIL via Resend REST API
+// ════════════════════════════════════════════
+async function sendAdminEmail(subject, html) {
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_KEY}`,
+        'Content-Type':  'application/json'
+      },
+      body: JSON.stringify({
+        from   : `Black Ridge Capital <alerts@YOUR_DOMAIN.com>`,
+        to     : [ADMIN_EMAIL],
+        subject: subject,
+        html   : `
+          <div style="font-family:Arial,sans-serif;background:#020408;color:#EEF0FA;padding:30px;border-radius:12px;max-width:560px;margin:0 auto;border:1px solid rgba(212,169,75,.3);">
+            <div style="text-align:center;margin-bottom:24px;">
+              <div style="font-size:1.4rem;font-weight:700;color:#D4A94B;letter-spacing:.04em;">⬡ Black Ridge Capital</div>
+              <div style="font-size:.75rem;color:#5A6488;letter-spacing:.15em;text-transform:uppercase;">Admin Notification</div>
+            </div>
+            ${html}
+            <div style="margin-top:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);font-size:.72rem;color:#5A6488;text-align:center;">
+              Black Ridge Capital · US-Based Operations · Do not reply to this email
+            </div>
+          </div>`
+      })
+    });
+  } catch(e) {
+    console.warn('Email send failed (non-critical):', e.message);
+  }
+}
+
+// ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// LIVE CRYPTO PRICES — Phase 6
+// 3-source fallback: Binance → CryptoCompare → Coinbase
+// No API key needed for any of these from the browser
+// ════════════════════════════════════════════
+
+// Maps our symbols to each API's format
+const BINANCE_PAIRS = {
+  BTC:'BTCUSDT', ETH:'ETHUSDT', BNB:'BNBUSDT',
+  SOL:'SOLUSDT', XRP:'XRPUSDT', LTC:'LTCUSDT',
+  DOGE:'DOGEUSDT', SUI:'SUIUSDT', ADA:'ADAUSDT'
+};
+const CC_SYMS = 'BTC,ETH,USDT,BNB,SOL,XRP,LTC,DOGE,SUI,ADA';
+
+function applyPrices(updates) {
+  // updates = { BTC: { price: 78400, change: 1.2 }, ... }
+  let changed = false;
+  COINS.forEach(c => {
+    if (!updates[c.s]) return;
+    const { price, change } = updates[c.s];
+    if (!price) return;
+    c.p  = '$' + (price >= 1000
+      ? price.toLocaleString('en-US', { maximumFractionDigits: 0 })
+      : price >= 1 ? price.toFixed(2) : price.toFixed(4));
+    c.c  = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+    c.up = change >= 0 ? 1 : 0;
+    changed = true;
+  });
+  if (changed) {
+    renderCoins(); renderTicker(); renderMkt();
+    // Update market strip prices too
+    MKT_DATA.forEach(m => {
+      if (updates[m.s]) {
+        m.p   = '$' + (updates[m.s].price >= 1000
+          ? updates[m.s].price.toLocaleString('en-US', { maximumFractionDigits: 0 })
+          : updates[m.s].price >= 1 ? updates[m.s].price.toFixed(2)
+          : updates[m.s].price.toFixed(4));
+        m.c   = (updates[m.s].change >= 0 ? '+' : '') + updates[m.s].change.toFixed(2) + '%';
+        m.up  = updates[m.s].change >= 0 ? 1 : 0;
+      }
+    });
+    renderMkt();
+  }
+}
+
+// SOURCE 1 — Binance (fastest, no key, CORS-open)
+async function fetchFromBinance() {
+  const symbols = Object.values(BINANCE_PAIRS).map(s => `"${s}"`).join(',');
+  const res = await fetch(
+    `https://api.binance.com/api/v3/ticker/24hr?symbols=[${symbols}]`,
+    { signal: AbortSignal.timeout(5000) }
+  );
+  if (!res.ok) throw new Error('Binance ' + res.status);
+  const list = await res.json();
+  const updates = {};
+  list.forEach(t => {
+    const sym = Object.keys(BINANCE_PAIRS).find(k => BINANCE_PAIRS[k] === t.symbol);
+    if (sym) updates[sym] = {
+      price:  parseFloat(t.lastPrice),
+      change: parseFloat(t.priceChangePercent)
+    };
+  });
+  // USDT always $1 (not on Binance USDT pairs)
+  updates['USDT'] = { price: 1.00, change: 0.00 };
+  return updates;
+}
+
+// SOURCE 2 — CryptoCompare (free, no key for basic)
+async function fetchFromCryptoCompare() {
+  const res = await fetch(
+    `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${CC_SYMS}&tsyms=USD`,
+    { signal: AbortSignal.timeout(6000) }
+  );
+  if (!res.ok) throw new Error('CryptoCompare ' + res.status);
+  const data = await res.json();
+  const raw  = data.RAW || {};
+  const updates = {};
+  CC_SYMS.split(',').forEach(sym => {
+    if (!raw[sym] || !raw[sym].USD) return;
+    updates[sym] = {
+      price:  raw[sym].USD.PRICE,
+      change: raw[sym].USD.CHANGEPCT24HOUR
+    };
+  });
+  return updates;
+}
+
+// SOURCE 3 — Coinbase (simple, no key, CORS-open)
+async function fetchFromCoinbase() {
+  const pairs = ['BTC-USD','ETH-USD','BNB-USD','SOL-USD',
+                 'XRP-USD','LTC-USD','DOGE-USD','ADA-USD'];
+  const results = await Promise.allSettled(
+    pairs.map(p =>
+      fetch(`https://api.coinbase.com/v2/prices/${p}/spot`,
+            { signal: AbortSignal.timeout(5000) })
+        .then(r => r.json())
+        .then(d => ({ sym: p.split('-')[0], price: parseFloat(d.data.amount) }))
+    )
+  );
+  const updates = { USDT: { price: 1.00, change: 0.00 } };
+  results.forEach(r => {
+    if (r.status === 'fulfilled' && r.value.price) {
+      updates[r.value.sym] = { price: r.value.price, change: 0 };
+    }
+  });
+  return updates;
+}
+
+let _priceErrors = 0;
+
+async function fetchLivePrices() {
+  // Try sources in order — first success wins
+  const sources = [
+    { name: 'Binance',        fn: fetchFromBinance },
+    { name: 'CryptoCompare',  fn: fetchFromCryptoCompare },
+    { name: 'Coinbase',       fn: fetchFromCoinbase },
+  ];
+
+  for (const src of sources) {
+    try {
+      const updates = await src.fn();
+      if (Object.keys(updates).length >= 5) {
+        applyPrices(updates);
+        _priceErrors = 0;
+        return; // success — stop trying further sources
+      }
+    } catch (_) {
+      // silent — try next source
+    }
+  }
+
+  // All 3 failed — only warn after 3 consecutive failures
+  _priceErrors++;
+  if (_priceErrors >= 3) {
+    console.warn('All price sources unavailable — displaying cached values.');
+  }
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderTiers(); renderCoins(); renderTicker(); renderNews(); renderMkt(); renderFAQ();
+  setTimeout(initRv, 120);
+  // Fetch live prices immediately, then every 30 seconds
+  fetchLivePrices();
+  setInterval(fetchLivePrices, 30000);
+});
+
+</script>
+</body>
+</html>
