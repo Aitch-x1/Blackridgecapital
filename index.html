@@ -1860,8 +1860,8 @@ async function renderWdrs() {
       <td>${w.crypto}</td>
       <td style="font-size:.68rem;max-width:140px;word-break:break-all;">${w.wallet_address}</td>
       <td style="font-size:.75rem;max-width:120px;">${w.notes || '—'}</td>
-      <td><span class="sbadge sb-\${(w.status||'').toLowerCase()}">${w.status}</span></td>
-      <td>${w.status === 'Pending' ? `<button class="abt abt-ok" onclick="updWdr('\${w.id}','Approved')">Approve</button> <button class="abt abt-rej" onclick="updWdr('\${w.id}','Rejected')">Reject</button>` : '—'}</td>
+      <td><span class="sbadge sb-${(w.status||'').toLowerCase()}">${w.status}</span></td>
+      <td>${w.status === 'Pending' ? '<button class="abt abt-ok" onclick="updWdr(\'' + w.id + '\',\'Approved\')">Approve</button> <button class="abt abt-rej" onclick="updWdr(\'' + w.id + '\',\'Rejected\')">Reject</button>' : '—'}</td>
     </tr>`).join('');
 }
 async function updWdr(id, status) {
