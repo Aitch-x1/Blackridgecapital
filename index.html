@@ -1184,6 +1184,8 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 // ⚠️  Resend API Key (Phase 5)
 const RESEND_KEY = 're_MtCTsuT7_DCQwT49a3pVLPd6ZW19Ngp5J';
 
+// Brevo key is stored securely in Vercel environment variables — not here
+
 // ⚠️  Admin email & site URL
 const ADMIN_EMAIL = 'johnashx@gmail.com';
 const SITE_URL    = 'https://blackridgecapital.vercel.app';
@@ -1625,7 +1627,7 @@ async function submitWithdrawal() {
   setTimeout(() => closeM('m-withdraw'), 3000);
 }
 
-// FORGOT PASSWORD
+// FORGOT PASSWORD — calls /api/send-reset (Vercel serverless function)
 async function doForgot() {
   const em = gv('f-email').toLowerCase();
   hideEl('fe'); hideEl('fs');
@@ -1634,19 +1636,29 @@ async function doForgot() {
   const btn = document.querySelector('#m-forgot .btn-gold');
   btn.textContent = 'Sending…'; btn.disabled = true;
 
-  const { error } = await _supa.auth.resetPasswordForEmail(em, {
-    redirectTo: SITE_URL + '?reset=1'
-  });
+  try {
+    const res = await fetch('/api/send-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em })
+    });
 
-  btn.textContent = 'Send Reset Link'; btn.disabled = false;
+    btn.textContent = 'Send Reset Link'; btn.disabled = false;
 
-  if (error) {
-    showErr('fe', error.message);
-  } else {
+    if (!res.ok) {
+      const err = await res.json();
+      showErr('fe', err.error || 'Could not send reset email. Please try again.');
+      return;
+    }
+
     const s = document.getElementById('fs');
     s.textContent = '✓ Reset link sent! Check your email inbox and click the link to set a new password.';
     s.style.display = 'block';
     document.getElementById('f-email').value = '';
+
+  } catch (e) {
+    btn.textContent = 'Send Reset Link'; btn.disabled = false;
+    showErr('fe', 'Network error. Please try again.');
   }
 }
 
