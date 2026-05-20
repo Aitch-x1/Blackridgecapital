@@ -1760,6 +1760,10 @@ function showAdmin() {
   renderAInv();
   renderWals();
   renderNots();
+  renderWdrs();
+  // Auto-refresh every 30 seconds so new requests appear without page reload
+  if (window._adminRefresh) clearInterval(window._adminRefresh);
+  window._adminRefresh = setInterval(() => { renderAInv(); renderWdrs(); renderNots(); }, 30000);
 }
 
 // ════════════════════════════════════════════
@@ -1835,7 +1839,12 @@ async function renderWdrs() {
   const { data: wdrs, error } = await _supa
     .from('withdrawals').select('*').order('created_at', { ascending: false });
   const tbody = document.getElementById('a-wdr-tbody');
-  if (error || !wdrs || !wdrs.length) {
+  if (error) {
+    console.error('renderWdrs error:', error);
+    tbody.innerHTML = '<tr><td colspan="9" class="emp" style="color:var(--err);">Error loading withdrawals: ' + error.message + '</td></tr>';
+    return;
+  }
+  if (!wdrs || !wdrs.length) {
     tbody.innerHTML = '<tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr>';
     document.getElementById('wdr-c').textContent = '';
     return;
