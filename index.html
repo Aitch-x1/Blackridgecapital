@@ -1562,10 +1562,11 @@ async function submitWithdrawal() {
   const btn = document.querySelector('#m-withdraw .btn-gold');
   btn.textContent = 'Submitting…'; btn.disabled = true;
 
-  // Get fresh session token
+  // Refresh session to ensure token is valid
+  await _supa.auth.refreshSession();
   const { data: { session: wdSess } } = await _supa.auth.getSession();
-  if (!wdSess) {
-    showErr('we', 'Session expired. Please sign in again.'); return;
+  if (!wdSess || !wdSess.access_token) {
+    showErr('we', 'Session expired. Please sign out and sign in again.'); return;
   }
 
   const wdPayload = {
@@ -2148,10 +2149,11 @@ async function submitInv() {
   const btn = document.querySelector('#m-invest #is3 .btn-gold');
   btn.textContent = 'Submitting…'; btn.disabled = true;
 
-  // Get fresh session token to authenticate the insert
+  // Refresh session to ensure token is valid
+  await _supa.auth.refreshSession();
   const { data: { session } } = await _supa.auth.getSession();
-  if (!session) {
-    alert('Session expired. Please sign in again.');
+  if (!session || !session.access_token) {
+    alert('Session expired. Please sign out and sign in again.');
     btn.textContent = 'Confirm Investment ✓'; btn.disabled = false;
     return;
   }
@@ -2181,7 +2183,9 @@ async function submitInv() {
 
   const inv = await res.json();
   if (!res.ok) {
-    alert('Submission failed: ' + (inv.message || inv.error || JSON.stringify(inv)));
+    console.error('Investment insert error:', JSON.stringify(inv));
+    console.error('Status:', res.status, 'Token:', session.access_token ? 'present' : 'missing');
+    alert('Submission failed: ' + (inv.message || inv.hint || inv.error || JSON.stringify(inv)) + '\n\nStatus: ' + res.status);
     btn.textContent = 'Confirm Investment ✓'; btn.disabled = false;
     return;
   }
