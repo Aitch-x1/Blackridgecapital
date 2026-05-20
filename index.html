@@ -923,6 +923,13 @@ footer{background:#020408;border-top:1px solid var(--b2);padding:3.5rem 3.5rem 2
           <tbody id="d-tbody"><tr><td colspan="6" class="emp">No investments yet. Click "+ New Investment" to begin your journey.</td></tr></tbody>
         </table>
       </div>
+      <div class="dsec" style="margin-top:2rem;">My Withdrawal Requests</div>
+      <div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;">
+        <table class="inv-tbl">
+          <thead><tr><th>Date</th><th>Amount</th><th>Crypto</th><th>Wallet Address</th><th>Notes</th><th>Status</th></tr></thead>
+          <tbody id="d-wdr-tbody"><tr><td colspan="6" class="emp">No withdrawal requests yet.</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -956,7 +963,7 @@ footer{background:#020408;border-top:1px solid var(--b2);padding:3.5rem 3.5rem 2
         </div>
         <div id="wal-mgr"></div>
       </div>
-      <div id="a-wdr" class="ac"><div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;"><table class="ait"><thead><tr><th>Date</th><th>Investor</th><th>Email</th><th>Amount</th><th>Crypto</th><th>Wallet Address</th><th>Notes</th><th>Status</th><th>Action</th></tr></thead><tbody id="wdr-tbody"><tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr></tbody></table></div></div>
+      <div id="a-wdr" class="ac"><div style="overflow-x:auto;background:rgba(8,14,26,.9);border:1px solid var(--b3);border-radius:14px;overflow:hidden;"><table class="ait"><thead><tr><th>Date</th><th>Investor</th><th>Email</th><th>Amount</th><th>Crypto</th><th>Wallet Address</th><th>Notes</th><th>Status</th><th>Action</th></tr></thead><tbody id="a-wdr-tbody"><tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr></tbody></table></div></div>
       <div id="a-not" class="ac"><div id="notif-body"></div></div>
     </div>
   </div>
@@ -1791,6 +1798,27 @@ async function renderDash() {
       <td style="color:var(--ok);font-weight:600;">$${fmtAmt(i.amount * 0.5)} / wk</td>
       <td><span class="sb sb-${i.status.toLowerCase().slice(0,1)}">${i.status}</span></td>
     </tr>`).join('');
+
+  // Load customer's own withdrawal requests
+  const { data: myWdrs } = await _supa
+    .from('withdrawals').select('*')
+    .eq('user_id', CU.id)
+    .order('created_at', { ascending: false });
+
+  const wdrTb = document.getElementById('d-wdr-tbody');
+  if (!myWdrs || !myWdrs.length) {
+    wdrTb.innerHTML = '<tr><td colspan="6" class="emp">No withdrawal requests yet.</td></tr>';
+  } else {
+    wdrTb.innerHTML = myWdrs.map(w => `
+      <tr>
+        <td>${fmtDate(w.created_at)}</td>
+        <td>$${fmtAmt(w.amount)}</td>
+        <td>${w.crypto}</td>
+        <td style="font-size:.7rem;max-width:140px;word-break:break-all;">${w.wallet_address}</td>
+        <td style="font-size:.75rem;">${w.notes || '—'}</td>
+        <td><span class="sb sb-${(w.status||'pending').toLowerCase().slice(0,1)}">${w.status}</span></td>
+      </tr>`).join('');
+  }
 }
 
 // ════════════════════════════════════════════
@@ -1806,7 +1834,7 @@ function swTab(el,id) {
 async function renderWdrs() {
   const { data: wdrs, error } = await _supa
     .from('withdrawals').select('*').order('created_at', { ascending: false });
-  const tbody = document.getElementById('wdr-tbody');
+  const tbody = document.getElementById('a-wdr-tbody');
   if (error || !wdrs || !wdrs.length) {
     tbody.innerHTML = '<tr><td colspan="9" class="emp">No withdrawal requests yet.</td></tr>';
     document.getElementById('wdr-c').textContent = '';
