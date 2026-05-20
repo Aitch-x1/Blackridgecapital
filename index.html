@@ -979,6 +979,9 @@ footer{background:#020408;border-top:1px solid var(--b2);padding:3.5rem 3.5rem 2
 <!-- FORGOT PASSWORD -->
 <div class="mo" id="m-forgot"><div class="mbox"><button class="mcl" onclick="closeM('m-forgot')">×</button><h2>Reset Password</h2><div class="msub">Enter your email and we'll send you a reset link</div><div id="fe" style="display:none;" class="ferr"></div><div id="fs" style="display:none;" class="fok"></div><div class="fg"><label>Email</label><input type="email" id="f-email" placeholder="you@email.com"/></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doForgot()">Send Reset Link</button><div class="ml"><a onclick="swM('m-forgot','m-login')">← Back to Sign In</a></div></div></div>
 
+<!-- RESET PASSWORD (shown after clicking email reset link) -->
+<div class="mo" id="m-reset"><div class="mbox"><button class="mcl" onclick="closeM('m-reset')">×</button><h2>Set New Password</h2><div class="msub">Enter and confirm your new password below</div><div id="rp-err" style="display:none;" class="ferr"></div><div id="rp-suc" style="display:none;" class="fok"></div><div class="fg"><label>New Password</label><input type="password" id="rp-pass" placeholder="Min. 8 characters"/></div><div class="fg"><label>Confirm Password</label><input type="password" id="rp-pass2" placeholder="Repeat new password"/></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doResetPassword()">Update Password</button></div></div>
+
 <!-- SIGNUP -->
 <div class="mo" id="m-signup"><div class="mbox"><button class="mcl" onclick="closeM('m-signup')">×</button><h2 data-i18n="signup_title">Get Started</h2><div class="msub" data-i18n="signup_sub">Create your free Black Ridge Capital investor account</div><div id="se" style="display:none;" class="ferr"></div><div id="ss" style="display:none;" class="fok"></div><div class="frow"><div class="fg"><label data-i18n="f_fname">First Name</label><input type="text" id="s-fn" placeholder="John"/></div><div class="fg"><label data-i18n="f_lname">Last Name</label><input type="text" id="s-ln" placeholder="Doe"/></div></div><div class="fg"><label>Email</label><input type="email" id="s-em" placeholder="you@email.com"/></div><div class="fg"><label data-i18n="f_phone">Phone</label><input type="tel" id="s-ph" placeholder="+1 234 567 8900"/></div><div class="fg"><label>Password</label><input type="password" id="s-pw" placeholder="Min. 6 characters"/></div><div class="tc-agree-row"><input type="checkbox" id="tc-chk"/><label for="tc-chk" data-i18n="tc_agree">I agree to the <a onclick="swM('m-signup','m-tc')">Terms &amp; Conditions</a> and confirm I am 18 years or older. I understand crypto investments carry risk.</label></div><button class="btn btn-gold" style="width:100%;padding:.88rem;" onclick="doSignup()" data-i18n="signup_btn">Create Account</button><div class="ml" data-i18n="signup_link">Already have an account? <a onclick="swM('m-signup','m-login')">Sign in</a></div></div></div>
 
@@ -1213,6 +1216,13 @@ async function restoreSession() {
 
 window.addEventListener('DOMContentLoaded', () => {
   restoreSession();
+
+  // Detect when user lands back on site after clicking a password reset email link
+  _supa.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      openM('m-reset');
+    }
+  });
 });
 
 // ════════════════════════════════════════════
@@ -1638,6 +1648,33 @@ async function doForgot() {
     s.style.display = 'block';
     document.getElementById('f-email').value = '';
   }
+}
+
+// RESET PASSWORD (called from the set-new-password modal)
+async function doResetPassword() {
+  const p1 = document.getElementById('rp-pass').value;
+  const p2 = document.getElementById('rp-pass2').value;
+  const errEl = document.getElementById('rp-err');
+  const sucEl = document.getElementById('rp-suc');
+  errEl.style.display = 'none'; sucEl.style.display = 'none';
+
+  if (!p1 || p1.length < 8) { showErr('rp-err', 'Password must be at least 8 characters.'); return; }
+  if (p1 !== p2) { showErr('rp-err', 'Passwords do not match.'); return; }
+
+  const btn = document.querySelector('#m-reset .btn-gold');
+  btn.textContent = 'Updating…'; btn.disabled = true;
+
+  const { error } = await _supa.auth.updateUser({ password: p1 });
+
+  btn.textContent = 'Update Password'; btn.disabled = false;
+
+  if (error) { showErr('rp-err', error.message); return; }
+
+  sucEl.textContent = '✓ Password updated successfully! You can now sign in.';
+  sucEl.style.display = 'block';
+  document.getElementById('rp-pass').value = '';
+  document.getElementById('rp-pass2').value = '';
+  setTimeout(() => { closeM('m-reset'); openM('m-login'); }, 2500);
 }
 
 // LOG IN
